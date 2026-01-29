@@ -5,7 +5,7 @@ namespace ScheduledTaskService;
 /// <summary>
 /// A hosted service that executes tasks on a schedule.
 /// </summary>
-public class ScheduledTaskHostedService : BaseHostedService
+public class ScheduledTaskHostedService : QuickHostedService.Application.QuickHostedService
 {
     private readonly TaskSchedule _schedule;
 

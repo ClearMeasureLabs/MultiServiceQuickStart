@@ -13,7 +13,7 @@ namespace QuickHostedService.Application;
 /// <summary>
 /// Base class for hosted services that provides dependency injection, logging, and lifecycle management.
 /// </summary>
-public abstract class BaseHostedService : IHostedService, IHostedServiceLifecycle, IDisposable
+public abstract class QuickHostedService : IHostedService, IHostedServiceLifecycle, IDisposable
 {
     private IServiceProvider? _serviceProvider;
     private ILogger? _logger;

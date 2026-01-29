@@ -6,9 +6,9 @@ namespace NServiceBusEndpoint;
 
 /// <summary>
 /// An example NServiceBus endpoint that processes order-related messages.
-/// Demonstrates usage of BaseEndpointService with Learning Transport.
+/// Demonstrates usage of QuickHostedEndpoint with Learning Transport.
 /// </summary>
-public class OrderProcessingEndpoint : BaseEndpointService
+public class OrderProcessingEndpoint : QuickHostedEndpoint.Application.QuickHostedEndpoint
 {
     /// <summary>
     /// Configure endpoint options for the order processing endpoint.

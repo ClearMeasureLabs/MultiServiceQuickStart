@@ -11,7 +11,7 @@ namespace QuickHostedEndpoint.Application;
 /// Base class for hosting NServiceBus endpoints as a hosted service.
 /// Provides reasonable defaults for endpoint configuration with SQL persistence for sagas.
 /// </summary>
-public abstract class BaseEndpointService : BaseHostedService
+public abstract class QuickHostedEndpoint : BaseHostedService
 {
     private IEndpointInstance? _endpointInstance;
     private IServiceCollection? _nsbServiceCollection;

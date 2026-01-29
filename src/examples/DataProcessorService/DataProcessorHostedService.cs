@@ -9,7 +9,7 @@ namespace DataProcessorService;
 /// <summary>
 /// A data processor service that demonstrates dependency injection and scoped services.
 /// </summary>
-public class DataProcessorHostedService : BaseHostedService
+public class DataProcessorHostedService : QuickHostedService.Application.QuickHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {

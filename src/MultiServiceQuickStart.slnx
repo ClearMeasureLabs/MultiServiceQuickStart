@@ -5,7 +5,12 @@
   <Folder Name="/Docs/">
     <File Path="../README.md" />
   </Folder>
-  <Folder Name="/Docs/QuickHostedEndpoint/" />
+  <Folder Name="/Docs/QuickHostedEndpoint/">
+    <File Path="../Docs/QuickHostedEndpoint/API.md" />
+    <File Path="../Docs/QuickHostedEndpoint/ARCHITECTURE.md" />
+    <File Path="../Docs/QuickHostedEndpoint/README.md" />
+    <File Path="../Docs/QuickHostedEndpoint/USAGE.md" />
+  </Folder>
   <Folder Name="/Docs/QuickHostedService/">
     <File Path="../Docs/QuickHostedService/API.md" />
     <File Path="../Docs/QuickHostedService/ARCHITECTURE.md" />

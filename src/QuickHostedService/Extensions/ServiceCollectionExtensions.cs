@@ -16,7 +16,7 @@ public static class ServiceCollectionExtensions
     /// <param name="services">The service collection.</param>
     /// <returns>The service collection for chaining.</returns>
     public static IServiceCollection AddQuickHostedService<THostedService>(this IServiceCollection services)
-        where THostedService : BaseHostedService
+        where THostedService : Application.QuickHostedService
     {
         return services.AddHostedService<THostedService>();
     }
@@ -31,7 +31,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddQuickHostedService<THostedService>(
         this IServiceCollection services,
         Func<IServiceProvider, THostedService> implementationFactory)
-        where THostedService : BaseHostedService
+        where THostedService : Application.QuickHostedService
     {
         return services.AddHostedService(implementationFactory);
     }

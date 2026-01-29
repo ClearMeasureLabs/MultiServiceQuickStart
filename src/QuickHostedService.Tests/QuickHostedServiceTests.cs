@@ -6,9 +6,9 @@ using Xunit;
 namespace QuickHostedService.Tests;
 
 /// <summary>
-/// Test service for testing BaseHostedService functionality.
+/// Test service for testing QuickHostedService functionality.
 /// </summary>
-public class TestHostedService : BaseHostedService
+public class TestHostedService : Application.QuickHostedService
 {
     public bool OnStartingAsyncCalled { get; private set; }
     public bool OnStoppingAsyncCalled { get; private set; }
@@ -61,7 +61,7 @@ public class TestService : ITestService
     }
 }
 
-public class BaseHostedServiceTests
+public class QuickHostedServiceTests
 {
     [Fact]
     public async Task StartAsync_ShouldCallLifecycleMethods_InCorrectOrder()

@@ -3,9 +3,9 @@ using QuickHostedService.Application;
 namespace SimpleWorker;
 
 /// <summary>
-/// A simple background worker that demonstrates basic usage of BaseHostedService.
+/// A simple background worker that demonstrates basic usage of QuickHostedService.
 /// </summary>
-public class SimpleWorkerService : BaseHostedService
+public class SimpleWorkerService : QuickHostedService.Application.QuickHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
