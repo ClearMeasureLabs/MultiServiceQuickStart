@@ -1,5 +1,5 @@
+using ClearMeasure.HostedService.Configuration;
 using FluentAssertions;
-using QuickHostedService.Infrastructure.Configuration;
 using Serilog;
 using Serilog.Events;
 using Xunit;

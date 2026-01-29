@@ -1,5 +1,6 @@
+using ClearMeasure.HostedService.Exceptions;
+
 using FluentAssertions;
-using QuickHostedService.Core.Exceptions;
 using Xunit;
 
 namespace QuickHostedService.Tests.Core;

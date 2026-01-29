@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Events;
 
-namespace QuickHostedService.Infrastructure.Configuration;
+namespace ClearMeasure.HostedService.Configuration;
 
 /// <summary>
 /// Configuration options for logging.

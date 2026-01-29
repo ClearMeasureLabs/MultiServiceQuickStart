@@ -27,7 +27,7 @@
     <Project Path="examples/ScheduledTaskService/ScheduledTaskService.csproj" />
     <Project Path="examples/SimpleWorker/SimpleWorker.csproj" />
   </Folder>
-  <Project Path="QuickHostedEndpoint/QuickHostedEndpoint.csproj" Id="17d6abd8-b482-4103-8bd5-7cb6c0f26480" />
+  <Project Path="QuickHostedEndpoint/ClearMeasure.HostedEndpoint.csproj" Id="17d6abd8-b482-4103-8bd5-7cb6c0f26480" />
   <Project Path="QuickHostedService.Tests/QuickHostedService.Tests.csproj" />
-  <Project Path="QuickHostedService/QuickHostedService.csproj" Id="9b8da57b-cbd5-4ae1-a0b6-bcab13d9a0a6" />
+  <Project Path="QuickHostedService/ClearMeasure.HostedService.csproj" Id="9b8da57b-cbd5-4ae1-a0b6-bcab13d9a0a6" />
 </Solution>

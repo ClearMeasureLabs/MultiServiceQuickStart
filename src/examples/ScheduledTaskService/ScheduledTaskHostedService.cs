@@ -1,11 +1,11 @@
-using QuickHostedService.Application;
+using ClearMeasure.HostedService;
 
 namespace ScheduledTaskService;
 
 /// <summary>
 /// A hosted service that executes tasks on a schedule.
 /// </summary>
-public class ScheduledTaskHostedService : QuickHostedService.Application.QuickHostedService
+public class ScheduledTaskHostedService : ClearHostedService
 {
     private readonly TaskSchedule _schedule;
 

@@ -1,11 +1,11 @@
-using QuickHostedService.Application;
+using ClearMeasure.HostedService;
 
 namespace SimpleWorker;
 
 /// <summary>
-/// A simple background worker that demonstrates basic usage of QuickHostedService.
+/// A simple background worker that demonstrates basic usage of ClearHostedService.
 /// </summary>
-public class SimpleWorkerService : QuickHostedService.Application.QuickHostedService
+public class SimpleWorkerService : ClearHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

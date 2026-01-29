@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-namespace QuickHostedService.Extensions;
+namespace ClearMeasure.HostedService.Extensions;
 
 /// <summary>
 /// Extension methods for <see cref="IHostBuilder"/> to simplify host configuration.

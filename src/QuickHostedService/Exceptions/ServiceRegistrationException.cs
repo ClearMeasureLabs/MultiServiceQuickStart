@@ -1,4 +1,4 @@
-namespace QuickHostedService.Core.Exceptions;
+namespace ClearMeasure.HostedService.Exceptions;
 
 /// <summary>
 /// Exception thrown when there's an error during service registration.

@@ -1,4 +1,4 @@
-namespace QuickHostedEndpoint.Core.Exceptions;
+namespace ClearMeasure.HostedEndpoint.Exceptions;
 
 /// <summary>
 /// Exception thrown when there is an error configuring or starting the NServiceBus endpoint.

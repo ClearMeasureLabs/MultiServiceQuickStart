@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\QuickHostedEndpoint\ClearMeasure.HostedEndpoint.csproj" />
     <ProjectReference Include="..\..\QuickHostedEndpoint\QuickHostedEndpoint.csproj" />
   </ItemGroup>
 

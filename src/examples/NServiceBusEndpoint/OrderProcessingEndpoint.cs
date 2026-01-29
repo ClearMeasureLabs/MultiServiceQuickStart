@@ -1,6 +1,7 @@
+using ClearMeasure.HostedEndpoint;
+using ClearMeasure.HostedEndpoint.Configuration;
+
 using NServiceBus;
-using QuickHostedEndpoint.Application;
-using QuickHostedEndpoint.Infrastructure.Configuration;
 
 namespace NServiceBusEndpoint;
 
@@ -8,7 +9,7 @@ namespace NServiceBusEndpoint;
 /// An example NServiceBus endpoint that processes order-related messages.
 /// Demonstrates usage of QuickHostedEndpoint with Learning Transport.
 /// </summary>
-public class OrderProcessingEndpoint : QuickHostedEndpoint.Application.QuickHostedEndpoint
+public class OrderProcessingEndpoint : ClearHostedEndpoint
 {
     /// <summary>
     /// Configure endpoint options for the order processing endpoint.

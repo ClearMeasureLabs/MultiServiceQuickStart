@@ -1,19 +1,22 @@
+using ClearMeasure.HostedService.Configuration;
+using ClearMeasure.HostedService.Exceptions;
+using ClearMeasure.HostedService.Interfaces;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using QuickHostedService.Core.Exceptions;
-using QuickHostedService.Core.Interfaces;
-using QuickHostedService.Infrastructure.Configuration;
+
 using Serilog;
 using Serilog.Events;
+
 using ILogger = Serilog.ILogger;
 
-namespace QuickHostedService.Application;
+namespace ClearMeasure.HostedService;
 
 /// <summary>
 /// Base class for hosted services that provides dependency injection, logging, and lifecycle management.
 /// </summary>
-public abstract class QuickHostedService : IHostedService, IHostedServiceLifecycle, IDisposable
+public abstract class ClearHostedService : IHostedService, IHostedServiceLifecycle, IDisposable
 {
     private IServiceProvider? _serviceProvider;
     private ILogger? _logger;

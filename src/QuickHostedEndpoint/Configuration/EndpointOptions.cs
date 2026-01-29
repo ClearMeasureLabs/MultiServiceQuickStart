@@ -1,4 +1,4 @@
-namespace QuickHostedEndpoint.Infrastructure.Configuration;
+namespace ClearMeasure.HostedEndpoint.Configuration;
 
 /// <summary>
 /// Configuration options for NServiceBus endpoint hosting.

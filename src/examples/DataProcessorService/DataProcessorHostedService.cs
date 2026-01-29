@@ -1,15 +1,15 @@
+using ClearMeasure.HostedService;
 using DataProcessorService.Models;
 using DataProcessorService.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using QuickHostedService.Application;
 
 namespace DataProcessorService;
 
 /// <summary>
 /// A data processor service that demonstrates dependency injection and scoped services.
 /// </summary>
-public class DataProcessorHostedService : QuickHostedService.Application.QuickHostedService
+public class DataProcessorHostedService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {

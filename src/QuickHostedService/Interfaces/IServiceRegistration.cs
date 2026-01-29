@@ -1,6 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 
-namespace QuickHostedService.Core.Interfaces;
+namespace ClearMeasure.HostedService.Interfaces;
 
 /// <summary>
 /// Defines the contract for dependency registration.

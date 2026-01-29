@@ -1,17 +1,17 @@
 using Microsoft.Extensions.DependencyInjection;
-using QuickHostedEndpoint.Core.Exceptions;
-using QuickHostedEndpoint.Infrastructure.Configuration;
-using QuickHostedService.Application;
 using System.Data.Common;
+using ClearMeasure.HostedEndpoint.Exceptions;
+using ClearMeasure.HostedService;
 using Microsoft.Data.SqlClient;
+using ClearMeasure.HostedEndpoint.Configuration;
 
-namespace QuickHostedEndpoint.Application;
+namespace ClearMeasure.HostedEndpoint;
 
 /// <summary>
 /// Base class for hosting NServiceBus endpoints as a hosted service.
 /// Provides reasonable defaults for endpoint configuration with SQL persistence for sagas.
 /// </summary>
-public abstract class QuickHostedEndpoint : BaseHostedService
+public abstract class ClearHostedEndpoint : ClearHostedService
 {
     private IEndpointInstance? _endpointInstance;
     private IServiceCollection? _nsbServiceCollection;

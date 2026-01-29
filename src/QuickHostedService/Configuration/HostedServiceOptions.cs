@@ -1,4 +1,4 @@
-namespace QuickHostedService.Infrastructure.Configuration;
+namespace ClearMeasure.HostedService.Configuration;
 
 /// <summary>
 /// Configuration options for hosted services.

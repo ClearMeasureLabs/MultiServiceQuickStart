@@ -1,4 +1,4 @@
-namespace QuickHostedService.Core.Interfaces;
+namespace ClearMeasure.HostedService.Interfaces;
 
 /// <summary>
 /// Defines lifecycle hooks for hosted services.

@@ -9,6 +9,18 @@
       {
         "Path": "examples\\NServiceBusWebApp\\NServiceBusWebApp.csproj",
         "Action": "Start"
+      },
+      {
+        "Path": "examples\\DataProcessorService\\DataProcessorService.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "examples\\ScheduledTaskService\\ScheduledTaskService.csproj",
+        "Action": "Start"
+      },
+      {
+        "Path": "examples\\SimpleWorker\\SimpleWorker.csproj",
+        "Action": "Start"
       }
     ]
   }

@@ -1,4 +1,4 @@
-namespace QuickHostedService.Core.Exceptions;
+namespace ClearMeasure.HostedService.Exceptions;
 
 /// <summary>
 /// Base exception for hosted service-related errors.
