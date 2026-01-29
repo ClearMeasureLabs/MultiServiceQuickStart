@@ -73,8 +73,8 @@ public abstract class BaseHostedService : IHostedService, IHostedServiceLifecycl
             _logger = Log.Logger;
             _logger.Information("Starting hosted service: {ServiceType}", GetType().Name);
 
-            // Build service collection
-            var services = new ServiceCollection();
+            // Build service collection - allows derived classes to provide their own
+            var services = CreateServiceCollection();
 
             // Add logging
             services.AddLogging(builder =>
@@ -94,8 +94,8 @@ public abstract class BaseHostedService : IHostedService, IHostedServiceLifecycl
                     "Failed to register dependencies. See inner exception for details.", ex);
             }
 
-            // Build service provider
-            _serviceProvider = services.BuildServiceProvider();
+            // Build service provider - allows derived classes to build their own
+            _serviceProvider = await BuildServiceProviderAsync(services, cancellationToken);
 
             // Call startup hook
             await OnStartingAsync(cancellationToken);
@@ -216,6 +216,28 @@ public abstract class BaseHostedService : IHostedService, IHostedServiceLifecycl
     protected virtual LoggingOptions GetLoggingOptions()
     {
         return new LoggingOptions();
+    }
+
+    /// <summary>
+    /// Creates the service collection for dependency injection.
+    /// Override this method to provide a custom service collection (e.g., when using NServiceBus).
+    /// </summary>
+    /// <returns>A new or pre-configured service collection.</returns>
+    protected virtual IServiceCollection CreateServiceCollection()
+    {
+        return new ServiceCollection();
+    }
+
+    /// <summary>
+    /// Builds the service provider from the configured service collection.
+    /// Override this method when the framework requires a custom build process (e.g., NServiceBus endpoint startup).
+    /// </summary>
+    /// <param name="services">The configured service collection.</param>
+    /// <param name="cancellationToken">A cancellation token to observe during build.</param>
+    /// <returns>A task containing the built service provider.</returns>
+    protected virtual Task<IServiceProvider> BuildServiceProviderAsync(IServiceCollection services, CancellationToken cancellationToken)
+    {
+        return Task.FromResult<IServiceProvider>(services.BuildServiceProvider());
     }
 
     /// <summary>

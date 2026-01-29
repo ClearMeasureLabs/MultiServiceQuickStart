@@ -6,6 +6,13 @@ An opinionated base implementation of `IHostedService` for building robust, prod
 
 QuickHostedService provides a streamlined foundation for creating background services and hosted applications in .NET. It eliminates repetitive setup code by providing sensible defaults for logging, dependency injection, and application lifecycle management.
 
+## Projects
+
+| Project | Description |
+|---------|-------------|
+| **QuickHostedService** | Core library for building background services with Serilog logging and isolated DI |
+| **QuickHostedEndpoint** | Extension for hosting NServiceBus endpoints with SQL persistence support |
+
 ## Key Features
 
 - **Opinionated Base Implementation**: Built on top of `IHostedService` with best practices baked in
@@ -14,8 +21,11 @@ QuickHostedService provides a streamlined foundation for creating background ser
 - **Extensibility**: Easy-to-override methods for customizing application behavior
 - **Onion Architecture**: Clean separation of concerns following architectural best practices
 - **Production Ready**: Handles startup, shutdown, and error scenarios gracefully
+- **NServiceBus Integration**: QuickHostedEndpoint provides seamless NServiceBus endpoint hosting
 
 ## Quick Start
+
+### Background Service (QuickHostedService)
 
 ```csharp
 public class MyBackgroundService : BaseHostedService
@@ -32,6 +42,26 @@ public class MyBackgroundService : BaseHostedService
         // Your application logic here
         var myService = ServiceProvider.GetRequiredService<IMyService>();
         await myService.DoWorkAsync(stoppingToken);
+    }
+}
+```
+
+### NServiceBus Endpoint (QuickHostedEndpoint)
+
+```csharp
+public class OrderProcessingEndpoint : BaseEndpointService
+{
+    protected override EndpointOptions EndpointOptions { get; } = new()
+    {
+        EndpointName = "OrderProcessing",
+        EnableInstallers = true,
+        MaxConcurrency = 4
+    };
+
+    protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
+    {
+        var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+        transport.ConnectionString("host=localhost");
     }
 }
 ```
@@ -76,6 +106,11 @@ QuickHostedService/
 ??? Application/        # Base hosted service implementation
 ??? Infrastructure/     # Logging, configuration, external services
 ??? Extensions/         # Helper methods and service registration
+
+QuickHostedEndpoint/
+??? Core/               # Endpoint exceptions
+??? Application/        # BaseEndpointService implementation
+??? Infrastructure/     # EndpointOptions, SqlPersistenceOptions
 ```
 
 ## Requirements
@@ -85,13 +120,27 @@ QuickHostedService/
 - Microsoft.Extensions.DependencyInjection
 - Serilog (for logging)
 - ApplicationInsights (optional, for monitoring)
+- NServiceBus 9.x (for QuickHostedEndpoint)
 
 ## Documentation
 
+### QuickHostedService
 - [Architecture Overview](Docs/QuickHostedService/ARCHITECTURE.md)
 - [Usage Guide](Docs/QuickHostedService/USAGE.md)
 - [API Reference](Docs/QuickHostedService/API.md)
-- [Examples](src/examples/README.md)
+
+### QuickHostedEndpoint
+- [README](Docs/QuickHostedEndpoint/README.md)
+- [Architecture Overview](Docs/QuickHostedEndpoint/ARCHITECTURE.md)
+- [Usage Guide](Docs/QuickHostedEndpoint/USAGE.md)
+- [API Reference](Docs/QuickHostedEndpoint/API.md)
+
+### Examples
+- [SimpleWorker](src/examples/SimpleWorker) - Basic background worker
+- [DataProcessorService](src/examples/DataProcessorService) - DI and batch processing
+- [ScheduledTaskService](src/examples/ScheduledTaskService) - Time-based scheduling
+- [NServiceBusEndpoint](src/examples/NServiceBusEndpoint) - NServiceBus message endpoint
+- [NServiceBusWebApp](src/examples/NServiceBusWebApp) - Web app sending messages to endpoint
 
 ## Contributing
 
