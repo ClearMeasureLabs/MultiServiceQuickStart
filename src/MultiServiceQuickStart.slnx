@@ -1,0 +1,22 @@
+<Solution>
+  <Folder Name="/.github/">
+    <File Path=".github/copilot-instructions.md" />
+  </Folder>
+  <Folder Name="/Docs/" />
+  <Folder Name="/Docs/QuickHostedService/">
+    <File Path="Docs/QuickHostedService/DESIGN_DECISIONS.md" />
+    <File Path="Docs/QuickHostedService/DOCUMENTATION_INDEX.md" />
+    <File Path="Docs/QuickHostedService/FAQ.md" />
+    <File Path="Docs/QuickHostedService/IMPLEMENTATION_COMPLETE.md" />
+    <File Path="Docs/QuickHostedService/PROJECT_SUMMARY.md" />
+    <File Path="Docs/QuickHostedService/README.md" />
+    <File Path="Docs/QuickHostedService/USAGE.md" />
+  </Folder>
+  <Folder Name="/Example/">
+    <Project Path="examples/DataProcessorService/DataProcessorService.csproj" />
+    <Project Path="examples/ScheduledTaskService/ScheduledTaskService.csproj" />
+    <Project Path="examples/SimpleWorker/SimpleWorker.csproj" />
+  </Folder>
+  <Project Path="QuickHostedService.Tests/QuickHostedService.Tests.csproj" />
+  <Project Path="QuickHostedService/QuickHostedService.csproj" Id="9b8da57b-cbd5-4ae1-a0b6-bcab13d9a0a6" />
+</Solution>
