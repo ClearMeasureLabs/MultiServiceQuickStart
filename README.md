@@ -55,7 +55,7 @@ This library follows **Onion Architecture** principles with clear separation bet
 - **Infrastructure**: Logging, external dependencies, and cross-cutting concerns
 - **Presentation**: Hosted service entry points
 
-For detailed architecture documentation, see [ARCHITECTURE.md](ARCHITECTURE.md).
+For detailed architecture documentation, see [ARCHITECTURE.md](/Docs/QuickHostedService/ARCHITECTURE.md).
 
 ## Use Cases
 
@@ -88,14 +88,14 @@ QuickHostedService/
 
 ## Documentation
 
-- [Architecture Overview](ARCHITECTURE.md)
-- [Usage Guide](USAGE.md)
-- [API Reference](API.md)
-- [Examples](examples/README.md)
+- [Architecture Overview](Docs/QuickHostedService/ARCHITECTURE.md)
+- [Usage Guide](Docs/QuickHostedService/USAGE.md)
+- [API Reference](Docs/QuickHostedService/API.md)
+- [Examples](src/examples/README.md)
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read [CONTRIBUTING.md](Docs/QuickHostedService/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
