@@ -1,1 +1,2 @@
-/src/.NCrunch_MultiServiceQuickStart/*.cache
+/src/.NCrunch_*/*
+
