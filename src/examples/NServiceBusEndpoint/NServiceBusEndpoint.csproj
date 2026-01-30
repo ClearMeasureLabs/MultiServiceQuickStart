@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\QuickHostedEndpoint\ClearMeasure.HostedEndpoint.csproj" />
-    <ProjectReference Include="..\..\QuickHostedEndpoint\QuickHostedEndpoint.csproj" />
+    <ProjectReference Include="..\..\ClearHostedEndpoint\ClearMeasure.HostedEndpoint.csproj" />
   </ItemGroup>
 
   <ItemGroup>

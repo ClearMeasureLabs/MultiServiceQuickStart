@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\QuickHostedService\ClearMeasure.HostedService.csproj" />
+    <ProjectReference Include="..\..\ClearHostedService\ClearMeasure.HostedService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
