@@ -1,13 +1,13 @@
-# QuickHostedEndpoint Usage Guide
+# ClearHostedEndpoint Usage Guide
 
-This guide covers common usage patterns for the QuickHostedEndpoint library.
+This guide covers common usage patterns for the ClearHostedEndpoint library.
 
 ## Basic Endpoint
 
 The simplest endpoint implementation requires only transport configuration:
 
 ```csharp
-public class MyEndpoint : BaseEndpointService
+public class MyEndpoint : ClearHostedEndpoint
 {
     protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
     {
@@ -29,7 +29,7 @@ await host.RunAsync();
 Configure endpoint behavior through `EndpointOptions`:
 
 ```csharp
-public class OrderProcessingEndpoint : BaseEndpointService
+public class OrderProcessingEndpoint : ClearHostedEndpoint
 {
     protected override EndpointOptions EndpointOptions { get; } = new()
     {
@@ -56,7 +56,7 @@ public class OrderProcessingEndpoint : BaseEndpointService
 Enable saga persistence for long-running workflows:
 
 ```csharp
-public class SagaEndpoint : BaseEndpointService
+public class SagaEndpoint : ClearHostedEndpoint
 {
     protected override EndpointOptions EndpointOptions { get; } = new()
     {
@@ -152,7 +152,7 @@ protected override void ConfigureTransport(EndpointConfiguration endpointConfigu
 Register services that handlers can consume:
 
 ```csharp
-public class OrderEndpoint : BaseEndpointService
+public class OrderEndpoint : ClearHostedEndpoint
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -192,7 +192,7 @@ public class PlaceOrderHandler : IHandleMessages<PlaceOrder>
 Use lifecycle methods for initialization and cleanup:
 
 ```csharp
-public class MonitoredEndpoint : BaseEndpointService
+public class MonitoredEndpoint : ClearHostedEndpoint
 {
     public override async Task OnStartingAsync(CancellationToken cancellationToken)
     {
@@ -266,7 +266,7 @@ protected override void ConfigureRecoverability(EndpointConfiguration endpointCo
 Access `EndpointInstance` to send messages from within the endpoint:
 
 ```csharp
-public class ScheduledOrderEndpoint : BaseEndpointService
+public class ScheduledOrderEndpoint : ClearHostedEndpoint
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

@@ -2,7 +2,7 @@
 
 ## Overview
 
-QuickHostedService is built following **Onion Architecture** principles, ensuring a clean separation of concerns and making the codebase maintainable, testable, and extensible.
+ClearHostedService is built following **Onion Architecture** principles, ensuring a clean separation of concerns and making the codebase maintainable, testable, and extensible.
 
 ## Architectural Principles
 
@@ -14,7 +14,7 @@ The library is structured in concentric layers, with dependencies pointing inwar
 ???????????????????????????????????????????
 ?     Infrastructure Layer               ?  ? Logging, External Services
 ???????????????????????????????????????????
-?     Application Layer                  ?  ? BaseHostedService, Orchestration
+?     Application Layer                  ?  ? ClearHostedService, Orchestration
 ???????????????????????????????????????????
 ?     Core/Domain Layer                  ?  ? Abstractions, Interfaces
 ???????????????????????????????????????????
@@ -54,7 +54,7 @@ All dependencies are abstracted through interfaces, allowing:
 **Responsibility**: Implement base hosted service orchestration
 
 **Components:**
-- `BaseHostedService`: Main base class for all hosted services
+- `ClearHostedService`: Main base class for all hosted services
   - Implements `IHostedService`
   - Manages service collection lifecycle
   - Handles startup and shutdown sequences
@@ -95,7 +95,7 @@ protected abstract Task ExecuteAsync(CancellationToken stoppingToken)
 
 ### Isolated Service Collections
 
-Each `BaseHostedService` instance maintains its own `ServiceCollection`:
+Each `ClearHostedService` instance maintains its own `ServiceCollection`:
 
 ```
 ???????????????????????????????????
@@ -134,7 +134,7 @@ Each `BaseHostedService` instance maintains its own `ServiceCollection`:
 
 ### Serilog Integration
 
-QuickHostedService uses Serilog as the primary logging framework:
+ClearHostedService uses Serilog as the primary logging framework:
 
 **Default Configuration:**
 - Minimum Level: Information
@@ -227,7 +227,7 @@ Optional telemetry for production environments:
 
 ### For Library Consumers
 
-Developers using QuickHostedService can extend:
+Developers using ClearHostedService can extend:
 
 1. **Dependency Registration**: Override `RegisterDependencyInjection()`
 2. **Logging Configuration**: Override `ConfigureLogging()`

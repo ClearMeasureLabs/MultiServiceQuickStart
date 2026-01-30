@@ -1,6 +1,6 @@
 # Scheduled Task Service Example
 
-This example demonstrates how to build a time-based scheduled task service using QuickHostedService.
+This example demonstrates how to build a time-based scheduled task service using ClearHostedService.
 
 ## What It Does
 

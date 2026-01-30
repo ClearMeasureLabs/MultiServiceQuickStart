@@ -1,6 +1,6 @@
 # NServiceBus Web App Example
 
-A simple ASP.NET web application that demonstrates how to send messages to an NServiceBus endpoint using the QuickHostedEndpoint library.
+A simple ASP.NET web application that demonstrates how to send messages to an NServiceBus endpoint using the ClearHostedEndpoint library.
 
 ## Overview
 

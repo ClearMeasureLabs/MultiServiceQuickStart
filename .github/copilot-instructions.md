@@ -1,10 +1,10 @@
-# GitHub Copilot Instructions for QuickHostedService
+# GitHub Copilot Instructions for ClearHostedService
 
-This file provides instructions and context for GitHub Copilot when working with the QuickHostedService project.
+This file provides instructions and context for GitHub Copilot when working with the ClearHostedService project.
 
 ## Project Overview
 
-**QuickHostedService** is an opinionated base implementation of `IHostedService` for building robust, production-ready background services in .NET with minimal boilerplate code.
+**ClearHostedService** is an opinionated base implementation of `IHostedService` for building robust, production-ready background services in .NET with minimal boilerplate code.
 
 ### Key Characteristics
 - **Target Framework**: .NET 10.0
@@ -16,19 +16,19 @@ This file provides instructions and context for GitHub Copilot when working with
 ## Architecture Principles
 
 ### Onion Architecture Layers
-1. **Core** (`QuickHostedService/Core/`) - Pure abstractions, no dependencies
+1. **Core** (`ClearHostedService/Core/`) - Pure abstractions, no dependencies
    - Interfaces: `IHostedServiceLifecycle`, `IServiceRegistration`
    - Exceptions: `HostedServiceException`, `ServiceRegistrationException`
 
-2. **Application** (`QuickHostedService/Application/`) - Business logic
-   - `BaseHostedService` - Main abstract base class
+2. **Application** (`ClearHostedService/Application/`) - Business logic
+   - `ClearHostedService` - Main abstract base class
 
-3. **Infrastructure** (`QuickHostedService/Infrastructure/`) - External concerns
+3. **Infrastructure** (`ClearHostedService/Infrastructure/`) - External concerns
    - Configuration: `LoggingOptions`, `HostedServiceOptions`
    - Logging setup with Serilog
 
 ### Key Design Decisions
-- **Isolated Service Collections**: Each `BaseHostedService` instance has its own `IServiceProvider`
+- **Isolated Service Collections**: Each `ClearHostedService` instance has its own `IServiceProvider`
 - **Public Lifecycle Methods**: `OnStartingAsync` and `OnStoppingAsync` are `public virtual`
 - **Abstract ExecuteAsync**: Must be implemented by derived classes
 - **Graceful Shutdown**: 30-second default timeout, configurable
@@ -44,7 +44,7 @@ This file provides instructions and context for GitHub Copilot when working with
 ### Code Style
 ```csharp
 // Good example
-public class MyService : BaseHostedService
+public class MyService : ClearHostedService
 {
     private readonly ILogger<MyService> _logger;
     
@@ -92,7 +92,7 @@ protected override Task OnStartingAsync(CancellationToken cancellationToken) // 
 
 ### Basic Hosted Service
 ```csharp
-public class MyWorker : BaseHostedService
+public class MyWorker : ClearHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -107,7 +107,7 @@ public class MyWorker : BaseHostedService
 
 ### With Dependency Injection
 ```csharp
-public class DataProcessor : BaseHostedService
+public class DataProcessor : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -126,7 +126,7 @@ public class DataProcessor : BaseHostedService
 
 ### With Lifecycle Hooks
 ```csharp
-public class ServiceWithHooks : BaseHostedService
+public class ServiceWithHooks : ClearHostedService
 {
     public override async Task OnStartingAsync(CancellationToken cancellationToken)
     {
@@ -186,7 +186,7 @@ public async Task ProcessData_WithValidInput_ProcessesSuccessfully()
 
 ## Documentation Structure
 
-All documentation is located in `Docs/QuickHostedService/`:
+All documentation is located in `Docs/ClearHostedService/`:
 
 - **README.md** - Project overview and quick start
 - **ARCHITECTURE.md** - Detailed architecture and design
@@ -206,7 +206,7 @@ When making changes to the library:
 2. Add usage examples to `USAGE.md`
 3. Document architecture changes in `ARCHITECTURE.md`
 4. Update `CHANGELOG.md` with version notes
-5. Update this `Copilot.md` if patterns change
+5. Update this `copilot-instructions.md` if patterns change
 
 ## Examples
 
@@ -265,10 +265,10 @@ await Task.Delay(5000, stoppingToken);
 
 ```bash
 # Build entire solution
-dotnet build QuickHostedService.sln
+dotnet build ClearHostedService.sln
 
 # Run all tests
-dotnet test QuickHostedService.sln
+dotnet test ClearHostedService.sln
 
 # Run specific example
 dotnet run --project examples/SimpleWorker/SimpleWorker.csproj
@@ -276,12 +276,12 @@ dotnet run --project examples/DataProcessorService/DataProcessorService.csproj
 dotnet run --project examples/ScheduledTaskService/ScheduledTaskService.csproj
 
 # Pack for NuGet
-dotnet pack QuickHostedService/QuickHostedService.csproj -c Release
+dotnet pack ClearHostedService/ClearHostedService.csproj -c Release
 ```
 
 ## Quick Reference
 
-### BaseHostedService Members
+### ClearHostedService Members
 
 | Member | Type | Description |
 |--------|------|-------------|
@@ -306,12 +306,12 @@ dotnet pack QuickHostedService/QuickHostedService.csproj -c Release
 
 ## Support and Resources
 
-- **Documentation**: See `Docs/QuickHostedService/` for comprehensive guides
+- **Documentation**: See `Docs/ClearHostedService/` for comprehensive guides
 - **Examples**: Check `examples/` for working implementations
-- **Tests**: See `QuickHostedService.Tests/` for testing patterns
+- **Tests**: See `ClearHostedService.Tests/` for testing patterns
 
 ---
 
 **Last Updated**: 2025-01-29  
 **Version**: 1.0.0  
-**Maintainer**: QuickHostedService Contributors
+**Maintainer**: ClearHostedService Contributors

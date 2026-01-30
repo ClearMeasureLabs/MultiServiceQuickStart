@@ -1,25 +1,12 @@
 <Solution>
   <Folder Name="/.github/">
-    <File Path=".github/copilot-instructions.md" />
+    <File Path="../.github/copilot-instructions.md" />
   </Folder>
   <Folder Name="/Docs/">
     <File Path="../README.md" />
   </Folder>
-  <Folder Name="/Docs/QuickHostedEndpoint/">
-    <File Path="../Docs/QuickHostedEndpoint/API.md" />
-    <File Path="../Docs/QuickHostedEndpoint/ARCHITECTURE.md" />
-    <File Path="../Docs/QuickHostedEndpoint/README.md" />
-    <File Path="../Docs/QuickHostedEndpoint/USAGE.md" />
-  </Folder>
-  <Folder Name="/Docs/QuickHostedService/">
-    <File Path="../Docs/QuickHostedService/API.md" />
-    <File Path="../Docs/QuickHostedService/ARCHITECTURE.md" />
-    <File Path="../Docs/QuickHostedService/DESIGN_DECISIONS.md" />
-    <File Path="../Docs/QuickHostedService/DOCUMENTATION_INDEX.md" />
-    <File Path="../Docs/QuickHostedService/FAQ.md" />
-    <File Path="../Docs/QuickHostedService/PROJECT_SUMMARY.md" />
-    <File Path="../Docs/QuickHostedService/USAGE.md" />
-  </Folder>
+  <Folder Name="/Docs/ClearHostedEndpoint/" />
+  <Folder Name="/Docs/ClearHostedService/" />
   <Folder Name="/Example/">
     <Project Path="examples/DataProcessorService/DataProcessorService.csproj" />
     <Project Path="examples/NServiceBusEndpoint/NServiceBusEndpoint.csproj" />
@@ -27,7 +14,7 @@
     <Project Path="examples/ScheduledTaskService/ScheduledTaskService.csproj" />
     <Project Path="examples/SimpleWorker/SimpleWorker.csproj" />
   </Folder>
-  <Project Path="QuickHostedEndpoint/ClearMeasure.HostedEndpoint.csproj" Id="17d6abd8-b482-4103-8bd5-7cb6c0f26480" />
-  <Project Path="QuickHostedService.Tests/QuickHostedService.Tests.csproj" />
-  <Project Path="QuickHostedService/ClearMeasure.HostedService.csproj" Id="9b8da57b-cbd5-4ae1-a0b6-bcab13d9a0a6" />
+  <Project Path="ClearHostedEndpoint/ClearMeasure.HostedEndpoint.csproj" Id="17d6abd8-b482-4103-8bd5-7cb6c0f26480" />
+  <Project Path="ClearHostedService.Tests/ClearHostedService.Tests.csproj" />
+  <Project Path="ClearHostedService/ClearMeasure.HostedService.csproj" Id="9b8da57b-cbd5-4ae1-a0b6-bcab13d9a0a6" />
 </Solution>

@@ -1,6 +1,6 @@
 # Usage Guide
 
-This guide demonstrates how to use QuickHostedService in various scenarios.
+This guide demonstrates how to use ClearHostedService in various scenarios.
 
 ## Table of Contents
 
@@ -18,9 +18,9 @@ This guide demonstrates how to use QuickHostedService in various scenarios.
 The most basic implementation requires only implementing the `ExecuteAsync` method:
 
 ```csharp
-using QuickHostedService;
+using ClearMeasure.HostedService;
 
-public class SimpleWorker : BaseHostedService
+public class SimpleWorker : ClearHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -55,7 +55,7 @@ await host.RunAsync();
 Override `RegisterDependencyInjection` to register your services:
 
 ```csharp
-public class DataProcessorService : BaseHostedService
+public class DataProcessorService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -93,7 +93,7 @@ public class DataProcessorService : BaseHostedService
 ### Using Scoped Services
 
 ```csharp
-public class ScopedServiceWorker : BaseHostedService
+public class ScopedServiceWorker : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -127,7 +127,7 @@ public class ScopedServiceWorker : BaseHostedService
 Override `ConfigureLogging` to customize log configuration:
 
 ```csharp
-public class CustomLoggingService : BaseHostedService
+public class CustomLoggingService : ClearHostedService
 {
     protected override void ConfigureLogging(ILoggingBuilder builder)
     {
@@ -198,7 +198,7 @@ protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 Use `OnStartingAsync` to perform initialization before the main execution starts:
 
 ```csharp
-public class InitializationService : BaseHostedService
+public class InitializationService : ClearHostedService
 {
     protected override async Task OnStartingAsync(CancellationToken cancellationToken)
     {
@@ -236,7 +236,7 @@ public class InitializationService : BaseHostedService
 Use `OnStoppingAsync` to perform cleanup before the service stops:
 
 ```csharp
-public class CleanupService : BaseHostedService
+public class CleanupService : ClearHostedService
 {
     protected override async Task OnStoppingAsync(CancellationToken cancellationToken)
     {
@@ -269,7 +269,7 @@ public class CleanupService : BaseHostedService
 ### Retry Logic
 
 ```csharp
-public class ResilientService : BaseHostedService
+public class ResilientService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -328,7 +328,7 @@ public class ResilientService : BaseHostedService
 ### Circuit Breaker Pattern
 
 ```csharp
-public class CircuitBreakerService : BaseHostedService
+public class CircuitBreakerService : ClearHostedService
 {
     private int consecutiveFailures = 0;
     private DateTime? circuitOpenedAt = null;
@@ -405,7 +405,7 @@ public class CircuitBreakerService : BaseHostedService
 ### Message Queue Consumer
 
 ```csharp
-public class MessageQueueConsumer : BaseHostedService
+public class MessageQueueConsumer : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -453,7 +453,7 @@ public class MessageQueueConsumer : BaseHostedService
 ### Scheduled Task Service
 
 ```csharp
-public class ScheduledTaskService : BaseHostedService
+public class ScheduledTaskService : ClearHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -497,7 +497,7 @@ public class ScheduledTaskService : BaseHostedService
 ### Multi-Tenant Service
 
 ```csharp
-public class MultiTenantService : BaseHostedService
+public class MultiTenantService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {

@@ -1,6 +1,6 @@
 # Data Processor Service Example
 
-This example demonstrates advanced usage of QuickHostedService with dependency injection, scoped services, and batch processing.
+This example demonstrates advanced usage of ClearHostedService with dependency injection, scoped services, and batch processing.
 
 ## What It Does
 

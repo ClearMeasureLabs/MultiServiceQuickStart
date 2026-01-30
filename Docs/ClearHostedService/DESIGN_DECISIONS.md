@@ -1,11 +1,11 @@
 # Design Decisions
 
-This document explains key design decisions made in QuickHostedService and the rationale behind them.
+This document explains key design decisions made in ClearHostedService and the rationale behind them.
 
 ## 1. Isolated Service Collections
 
 ### Decision
-Each `BaseHostedService` instance maintains its own `IServiceCollection` and `IServiceProvider`.
+Each `ClearHostedService` instance maintains its own `IServiceCollection` and `IServiceProvider`.
 
 ### Rationale
 - **Isolation**: Services don't interfere with each other
@@ -192,31 +192,7 @@ Built-in appsettings.json support:
 
 ---
 
-## 9. No Built-in Health Checks
-
-### Decision
-Don't include built-in health check endpoints in v1.0.
-
-### Rationale
-- **Scope**: Keep initial version focused
-- **Flexibility**: Health checks are deployment-specific
-- **Future**: Can be added later as an extension
-- **Pattern**: Let consumers implement as needed
-
-### Trade-offs
-- **Production Readiness**: Services need to add their own
-- **Consistency**: No standard health check pattern
-
-### Future Consideration
-Could add optional health check support in v2.0:
-- `/health` endpoint
-- Dependency health checks
-- Startup probes
-- Liveness probes
-
----
-
-## 10. Target .NET 10.0
+## 9. Target .NET 10.0
 
 ### Decision
 Target .NET 10.0 as the minimum version.

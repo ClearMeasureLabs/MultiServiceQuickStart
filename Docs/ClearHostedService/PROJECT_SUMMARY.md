@@ -9,7 +9,7 @@ You now have a fully functional, production-ready library for building hosted se
 ### Core Library (`QuickHostedService/`)
 
 #### Application Layer
-- ? **BaseHostedService** - The main abstract base class
+- ? **ClearHostedService** - The main abstract base class
   - Isolated service collection per instance
   - Built-in Serilog logging
   - Lifecycle management (OnStartingAsync, OnStoppingAsync)
@@ -60,7 +60,7 @@ You now have a fully functional, production-ready library for building hosted se
    - Multiple task orchestration
 
 ### Tests (`QuickHostedService.Tests/`)
-- ? Unit tests for BaseHostedService
+- ? Unit tests for ClearHostedService
 - ? Tests for lifecycle methods
 - ? Tests for exception types
 - ? Tests for configuration options
@@ -70,7 +70,7 @@ You now have a fully functional, production-ready library for building hosted se
 ```
 QuickHostedService/
 ??? QuickHostedService/              # Main library
-?   ??? Application/                 # BaseHostedService
+?   ??? Application/                 # ClearHostedService
 ?   ??? Core/                       # Abstractions & interfaces
 ?   ?   ??? Interfaces/
 ?   ?   ??? Exceptions/
@@ -113,9 +113,9 @@ dotnet run --project examples/ScheduledTaskService/ScheduledTaskService.csproj
 ## ?? Quick Usage
 
 ```csharp
-using QuickHostedService.Application;
+using ClearMeasure.HostedService;
 
-public class MyService : BaseHostedService
+public class MyService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {

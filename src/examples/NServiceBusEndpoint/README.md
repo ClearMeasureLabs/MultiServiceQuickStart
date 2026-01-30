@@ -1,6 +1,6 @@
 # NServiceBus Endpoint Example
 
-This example demonstrates how to use the `QuickHostedEndpoint` library to host an NServiceBus 9 endpoint as a hosted service.
+This example demonstrates how to use the `ClearHostedEndpoint` library to host an NServiceBus 9 endpoint as a hosted service.
 
 ## Overview
 
@@ -15,7 +15,7 @@ The example creates an order processing endpoint that:
 ```
 NServiceBusEndpoint/
 ??? Program.cs                    # Host configuration
-??? OrderProcessingEndpoint.cs    # The endpoint service (extends BaseEndpointService)
+??? OrderProcessingEndpoint.cs    # The endpoint service (extends ClearHostedEndpoint)
 ??? Messages/
 ?   ??? PlaceOrder.cs            # Command message
 ?   ??? OrderPlaced.cs           # Event message
@@ -35,9 +35,9 @@ The endpoint will start and wait for messages. Since this uses the Learning Tran
 
 ## Key Concepts
 
-### BaseEndpointService
+### ClearHostedEndpoint
 
-The `OrderProcessingEndpoint` class extends `BaseEndpointService` and demonstrates:
+The `OrderProcessingEndpoint` class extends `ClearHostedEndpoint` and demonstrates:
 
 1. **Endpoint Options**: Configure endpoint name, concurrency, retries
 2. **Transport Configuration**: Abstract method that must be implemented
@@ -45,7 +45,7 @@ The `OrderProcessingEndpoint` class extends `BaseEndpointService` and demonstrat
 
 ### Transport Configuration
 
-The `ConfigureTransport` method is **abstract** in `BaseEndpointService`. You must implement it to specify which transport to use:
+The `ConfigureTransport` method is **abstract** in `ClearHostedEndpoint`. You must implement it to specify which transport to use:
 
 ```csharp
 protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)

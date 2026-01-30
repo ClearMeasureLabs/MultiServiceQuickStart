@@ -1,13 +1,13 @@
 # API Reference
 
-## BaseHostedService
+## ClearHostedService
 
 The core abstract class that provides the foundation for all hosted services.
 
 ### Class Declaration
 
 ```csharp
-public abstract class BaseHostedService : IHostedService, IDisposable
+public abstract class ClearHostedService : IHostedService, IDisposable
 ```
 
 ### Properties
@@ -249,29 +249,6 @@ Disposes of resources used by the hosted service. Called automatically by the .N
 - Disposes the service provider
 - Disposes any other managed resources
 - Do not call this method directly
-
----
-
-## Extension Methods
-
-### ServiceCollectionExtensions
-
-Helper methods for common service registrations.
-
-#### AddQuickHostedService
-
-```csharp
-public static IServiceCollection AddQuickHostedService<THostedService>(
-    this IServiceCollection services) 
-    where THostedService : BaseHostedService
-```
-
-Registers a hosted service with the service collection.
-
-**Example:**
-```csharp
-services.AddQuickHostedService<MyBackgroundService>();
-```
 
 ---
 

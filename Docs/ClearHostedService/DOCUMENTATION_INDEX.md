@@ -1,8 +1,8 @@
-# QuickHostedService - Project Documentation
+# ClearHostedService - Project Documentation
 
 ## Documentation Index
 
-This project includes comprehensive documentation to help you understand, use, and contribute to QuickHostedService.
+This project includes comprehensive documentation to help you understand, and use ClearHostedService.
 
 ### For Users
 
@@ -20,7 +20,7 @@ Detailed usage guide with examples for common scenarios:
 
 #### ?? [API.md](API.md)
 Complete API reference documentation:
-- `BaseHostedService` class
+- `ClearHostedService` class
 - All methods and properties
 - Configuration options
 - Extension methods
@@ -53,14 +53,6 @@ Rationale behind key design decisions:
 - Why abstract vs virtual methods?
 - Trade-offs and alternatives considered
 
-#### ?? [CONTRIBUTING.md](CONTRIBUTING.md)
-Guidelines for contributing:
-- Code standards
-- Testing requirements
-- Documentation requirements
-- Pull request process
-- Project structure
-
 #### ?? [CHANGELOG.md](CHANGELOG.md)
 Version history and changes:
 - New features
@@ -71,7 +63,7 @@ Version history and changes:
 ## Documentation Structure
 
 ```
-QuickHostedService/
+ClearHostedService/
 ??? README.md                      # Project overview and quick start
 ??? ARCHITECTURE.md                # Architecture and design
 ??? USAGE.md                       # Detailed usage guide
@@ -103,7 +95,7 @@ QuickHostedService/
 - [Error Handling](USAGE.md#error-handling)
 
 ### API Reference
-- [BaseHostedService](API.md#basehostedservice)
+- [ClearHostedService](API.md#ClearHostedService)
 - [Methods](API.md#methods)
 - [Properties](API.md#properties)
 - [Configuration](API.md#configuration)
@@ -141,7 +133,6 @@ Documentation improvements are always welcome!
 
 - Found an error? [Open an issue](../../issues)
 - Have a suggestion? [Start a discussion](../../discussions)
-- Want to contribute? See [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 

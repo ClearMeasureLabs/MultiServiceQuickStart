@@ -1,6 +1,6 @@
 # Simple Worker Example
 
-This example demonstrates the most basic usage of QuickHostedService.
+This example demonstrates the most basic usage of ClearHostedService.
 
 ## What It Does
 
@@ -51,7 +51,7 @@ Press Ctrl+C to stop.
 ### The Service Class
 
 ```csharp
-public class SimpleWorkerService : BaseHostedService
+public class SimpleWorkerService : ClearHostedService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

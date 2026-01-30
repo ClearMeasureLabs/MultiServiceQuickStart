@@ -1,6 +1,6 @@
 # Examples
 
-This directory contains example implementations demonstrating how to use QuickHostedService in various scenarios.
+This directory contains example implementations demonstrating how to use ClearHostedService in various scenarios.
 
 ## Available Examples
 
@@ -8,7 +8,7 @@ This directory contains example implementations demonstrating how to use QuickHo
 A basic background worker that performs periodic tasks.
 
 **Key Concepts:**
-- Basic `BaseHostedService` implementation
+- Basic `ClearHostedService` implementation
 - Simple periodic execution
 - Cancellation token handling
 
@@ -219,14 +219,3 @@ cd examples/[ExampleName].Tests
 dotnet test
 ```
 
-## Contributing Examples
-
-Have a useful example? We'd love to include it!
-
-1. Create a new directory under `examples/`
-2. Follow the standard structure
-3. Include a detailed README
-4. Add unit tests
-5. Submit a pull request
-
-See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.

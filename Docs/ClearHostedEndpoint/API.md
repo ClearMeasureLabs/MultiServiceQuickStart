@@ -1,14 +1,14 @@
-# QuickHostedEndpoint API Reference
+# ClearHostedEndpoint API Reference
 
-Complete API reference for the QuickHostedEndpoint library.
+Complete API reference for the ClearHostedEndpoint library.
 
-## BaseEndpointService
+## ClearHostedEndpoint
 
 The main abstract class for creating NServiceBus endpoint hosted services.
 
-**Namespace:** `QuickHostedEndpoint.Application`
+**Namespace:** `ClearMeasure.HostedEndpoint`
 
-**Inheritance:** `BaseHostedService` ? `BaseEndpointService`
+**Inheritance:** `ClearHostedService` ? `ClearHostedEndpoint`
 
 ### Properties
 
@@ -213,7 +213,7 @@ Called when the hosted service is stopping. Stops the NServiceBus endpoint grace
 
 Configuration options for NServiceBus endpoint hosting.
 
-**Namespace:** `QuickHostedEndpoint.Infrastructure.Configuration`
+**Namespace:** `ClearMeasure.HostedEndpoint.Configuration`
 
 ### Properties
 
@@ -239,7 +239,7 @@ Configuration options for NServiceBus endpoint hosting.
 
 Configuration options for SQL Server persistence.
 
-**Namespace:** `QuickHostedEndpoint.Infrastructure.Configuration`
+**Namespace:** `ClearMeasure.HostedEndpoint.Configuration`
 
 ### Properties
 
@@ -258,7 +258,7 @@ Configuration options for SQL Server persistence.
 
 Exception thrown when there is an error configuring or starting the NServiceBus endpoint.
 
-**Namespace:** `QuickHostedEndpoint.Core.Exceptions`
+**Namespace:** `ClearMeasure.HostedEndpoint.Exceptions`
 
 **Inheritance:** `Exception` ? `EndpointConfigurationException`
 
@@ -272,9 +272,9 @@ public EndpointConfigurationException(string message, Exception innerException);
 
 ---
 
-## Inherited from BaseHostedService
+## Inherited from ClearHostedService
 
-`BaseEndpointService` inherits the following from `BaseHostedService`:
+`ClearHostedEndpoint` inherits the following from `ClearHostedService`:
 
 ### Properties
 
@@ -293,4 +293,4 @@ public EndpointConfigurationException(string message, Exception innerException);
 | `GetLoggingOptions()` | Provide logging options |
 | `OnStartingAsync(CancellationToken)` | Pre-execution hook |
 
-See [QuickHostedService API Reference](../QuickHostedService/API.md) for details.
+See [ClearHostedService API Reference](../ClearHostedService/API.md) for details.

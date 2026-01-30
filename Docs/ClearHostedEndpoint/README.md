@@ -1,10 +1,10 @@
-# QuickHostedEndpoint
+# ClearHostedEndpoint
 
-An extension of QuickHostedService that provides a streamlined base implementation for hosting NServiceBus endpoints as background services in .NET.
+An extension of ClearHostedService that provides a streamlined base implementation for hosting NServiceBus endpoints as background services in .NET.
 
 ## Overview
 
-QuickHostedEndpoint builds on top of `BaseHostedService` to provide an opinionated foundation for creating NServiceBus message endpoints. It eliminates boilerplate code for endpoint configuration, transport setup, persistence, and lifecycle management.
+ClearHostedEndpoint builds on top of `ClearHostedService` to provide an opinionated foundation for creating NServiceBus message endpoints. It eliminates boilerplate code for endpoint configuration, transport setup, persistence, and lifecycle management.
 
 ## Key Features
 
@@ -14,12 +14,12 @@ QuickHostedEndpoint builds on top of `BaseHostedService` to provide an opinionat
 - **Recoverability**: Configurable retry policies for immediate and delayed retries
 - **Outbox Pattern**: Optional exactly-once message processing with outbox support
 - **Lifecycle Management**: Proper endpoint startup and graceful shutdown handling
-- **Inherits BaseHostedService**: Full access to Serilog logging, DI, and lifecycle hooks
+- **Inherits ClearHostedService**: Full access to Serilog logging, DI, and lifecycle hooks
 
 ## Quick Start
 
 ```csharp
-public class OrderProcessingEndpoint : BaseEndpointService
+public class OrderProcessingEndpoint : ClearHostedEndpoint
 {
     protected override EndpointOptions EndpointOptions { get; } = new()
     {
@@ -41,13 +41,13 @@ public class OrderProcessingEndpoint : BaseEndpointService
 
 ## Architecture
 
-QuickHostedEndpoint follows the same **Onion Architecture** principles as QuickHostedService:
+ClearHostedEndpoint follows the same **Onion Architecture** principles as ClearHostedService:
 
 ```
-QuickHostedEndpoint/
+ClearHostedEndpoint/
 ??? Core/                  # Domain exceptions
 ?   ??? Exceptions/        # EndpointConfigurationException
-??? Application/           # BaseEndpointService implementation
+??? Application/           # ClearHostedEndpoint implementation
 ??? Infrastructure/        # Configuration options
     ??? Configuration/     # EndpointOptions, SqlPersistenceOptions
 ```
@@ -90,7 +90,7 @@ QuickHostedEndpoint/
 ## Requirements
 
 - .NET 10.0 or later
-- QuickHostedService
+- ClearHostedService
 - NServiceBus 9.x
 - NServiceBus.SqlPersistence (for saga support)
 - Microsoft.Data.SqlClient (for SQL Server)

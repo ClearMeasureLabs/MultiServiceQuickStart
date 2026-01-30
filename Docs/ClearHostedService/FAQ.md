@@ -2,20 +2,20 @@
 
 ## General Questions
 
-### What is QuickHostedService?
+### What is ClearHostedService?
 
-QuickHostedService is an opinionated base implementation of `IHostedService` that provides a foundation for building production-ready background services in .NET. It eliminates boilerplate code by providing pre-configured logging, dependency injection, and lifecycle management.
+ClearHostedService is an opinionated base implementation of `IHostedService` that provides a foundation for building production-ready background services in .NET. It eliminates boilerplate code by providing pre-configured logging, dependency injection, and lifecycle management.
 
-### When should I use QuickHostedService?
+### When should I use ClearHostedService?
 
-Use QuickHostedService when you need to:
+Use ClearHostedService when you need to:
 - Build background workers or daemon processes
 - Create scheduled tasks
 - Consume message queues
 - Process data in batches
 - Run microservices or standalone applications
 
-### When should I NOT use QuickHostedService?
+### When should I NOT use ClearHostedService?
 
 Don't use it for:
 - Web APIs or websites (use ASP.NET Core instead)
@@ -393,14 +393,6 @@ Check:
 
 ## Contributing
 
-### How can I contribute?
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for:
-- Code contributions
-- Documentation improvements
-- Bug reports
-- Feature requests
-
 ### I found a bug, what should I do?
 
 1. Check if it's already reported
@@ -411,10 +403,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for:
 ### I have a feature idea
 
 Great! Please:
-1. Check if it's already planned (CHANGELOG.md)
+1. Check if it's already planned in the issues tab
 2. Open a discussion to gather feedback
 3. Consider if it fits the project goals
-4. Optionally, create a pull request
 
 ---
 

@@ -1,17 +1,17 @@
-# QuickHostedService
+# Multi-Service Quick Start
 
 An opinionated base implementation of `IHostedService` for building robust, production-ready background services in .NET with minimal boilerplate code.
 
 ## Overview
 
-QuickHostedService provides a streamlined foundation for creating background services and hosted applications in .NET. It eliminates repetitive setup code by providing sensible defaults for logging, dependency injection, and application lifecycle management.
+ClearHostedService provides a streamlined foundation for creating background services and hosted applications in .NET. It eliminates repetitive setup code by providing sensible defaults for logging, dependency injection, and application lifecycle management.
 
 ## Projects
 
 | Project | Description |
 |---------|-------------|
-| **QuickHostedService** | Core library for building background services with Serilog logging and isolated DI |
-| **QuickHostedEndpoint** | Extension for hosting NServiceBus endpoints with SQL persistence support |
+| **ClearHostedService** | Core library for building background services with Serilog logging and isolated DI |
+| **ClearHostedEndpoint** | Extension for hosting NServiceBus endpoints with SQL persistence support |
 
 ## Key Features
 
@@ -21,14 +21,14 @@ QuickHostedService provides a streamlined foundation for creating background ser
 - **Extensibility**: Easy-to-override methods for customizing application behavior
 - **Onion Architecture**: Clean separation of concerns following architectural best practices
 - **Production Ready**: Handles startup, shutdown, and error scenarios gracefully
-- **NServiceBus Integration**: QuickHostedEndpoint provides seamless NServiceBus endpoint hosting
+- **NServiceBus Integration**: ClearHostedEndpoint provides seamless NServiceBus endpoint hosting
 
 ## Quick Start
 
-### Background Service (QuickHostedService)
+### Background Service (ClearHostedService)
 
 ```csharp
-public class MyBackgroundService : BaseHostedService
+public class MyBackgroundService : ClearHostedService
 {
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -46,10 +46,10 @@ public class MyBackgroundService : BaseHostedService
 }
 ```
 
-### NServiceBus Endpoint (QuickHostedEndpoint)
+### NServiceBus Endpoint (ClearHostedEndpoint)
 
 ```csharp
-public class OrderProcessingEndpoint : BaseEndpointService
+public class OrderProcessingEndpoint : ClearHostedEndpoint
 {
     protected override EndpointOptions EndpointOptions { get; } = new()
     {
@@ -68,7 +68,7 @@ public class OrderProcessingEndpoint : BaseEndpointService
 
 ## Design Philosophy
 
-QuickHostedService is designed around several core principles:
+ClearHostedService is designed around several core principles:
 
 1. **Convention over Configuration**: Sensible defaults that work for most scenarios
 2. **Isolation**: Each hosted service manages its own service collection and lifetime
@@ -85,11 +85,11 @@ This library follows **Onion Architecture** principles with clear separation bet
 - **Infrastructure**: Logging, external dependencies, and cross-cutting concerns
 - **Presentation**: Hosted service entry points
 
-For detailed architecture documentation, see [ARCHITECTURE.md](/Docs/QuickHostedService/ARCHITECTURE.md).
+For detailed architecture documentation, see [ARCHITECTURE.md](/Docs/ClearHostedService/ARCHITECTURE.md).
 
 ## Use Cases
 
-QuickHostedService is ideal for:
+ClearHostedService is ideal for:
 
 - Background workers and data processors
 - Scheduled tasks and recurring jobs
@@ -101,15 +101,15 @@ QuickHostedService is ideal for:
 ## Project Structure
 
 ```
-QuickHostedService/
+ClearHostedService/
 ??? Core/               # Domain models and core abstractions
-??? Application/        # Base hosted service implementation
+??? Application/        # ClearHostedService implementation
 ??? Infrastructure/     # Logging, configuration, external services
 ??? Extensions/         # Helper methods and service registration
 
-QuickHostedEndpoint/
+ClearHostedEndpoint/
 ??? Core/               # Endpoint exceptions
-??? Application/        # BaseEndpointService implementation
+??? Application/        # ClearHostedEndpoint implementation
 ??? Infrastructure/     # EndpointOptions, SqlPersistenceOptions
 ```
 
@@ -120,20 +120,20 @@ QuickHostedEndpoint/
 - Microsoft.Extensions.DependencyInjection
 - Serilog (for logging)
 - ApplicationInsights (optional, for monitoring)
-- NServiceBus 9.x (for QuickHostedEndpoint)
+- NServiceBus 9.x (for ClearHostedEndpoint)
 
 ## Documentation
 
-### QuickHostedService
-- [Architecture Overview](Docs/QuickHostedService/ARCHITECTURE.md)
-- [Usage Guide](Docs/QuickHostedService/USAGE.md)
-- [API Reference](Docs/QuickHostedService/API.md)
+### ClearHostedService
+- [Architecture Overview](Docs/ClearHostedService/ARCHITECTURE.md)
+- [Usage Guide](Docs/ClearHostedService/USAGE.md)
+- [API Reference](Docs/ClearHostedService/API.md)
 
-### QuickHostedEndpoint
-- [README](Docs/QuickHostedEndpoint/README.md)
-- [Architecture Overview](Docs/QuickHostedEndpoint/ARCHITECTURE.md)
-- [Usage Guide](Docs/QuickHostedEndpoint/USAGE.md)
-- [API Reference](Docs/QuickHostedEndpoint/API.md)
+### ClearHostedEndpoint
+- [README](Docs/ClearHostedEndpoint/README.md)
+- [Architecture Overview](Docs/ClearHostedEndpoint/ARCHITECTURE.md)
+- [Usage Guide](Docs/ClearHostedEndpoint/USAGE.md)
+- [API Reference](Docs/ClearHostedEndpoint/API.md)
 
 ### Examples
 - [SimpleWorker](src/examples/SimpleWorker) - Basic background worker
@@ -144,7 +144,7 @@ QuickHostedEndpoint/
 
 ## Contributing
 
-Contributions are welcome! Please read [CONTRIBUTING.md](Docs/QuickHostedService/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+Contributions are welcome! Please read [CONTRIBUTING.md](Docs/ClearHostedService/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
 ## License
 
