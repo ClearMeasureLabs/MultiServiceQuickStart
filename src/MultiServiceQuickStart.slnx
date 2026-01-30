@@ -5,8 +5,21 @@
   <Folder Name="/Docs/">
     <File Path="../README.md" />
   </Folder>
-  <Folder Name="/Docs/ClearHostedEndpoint/" />
-  <Folder Name="/Docs/ClearHostedService/" />
+  <Folder Name="/Docs/ClearHostedEndpoint/">
+    <File Path="../Docs/ClearHostedEndpoint/API.md" />
+    <File Path="../Docs/ClearHostedEndpoint/ARCHITECTURE.md" />
+    <File Path="../Docs/ClearHostedEndpoint/README.md" />
+    <File Path="../Docs/ClearHostedEndpoint/USAGE.md" />
+  </Folder>
+  <Folder Name="/Docs/ClearHostedService/">
+    <File Path="../Docs/ClearHostedService/API.md" />
+    <File Path="../Docs/ClearHostedService/ARCHITECTURE.md" />
+    <File Path="../Docs/ClearHostedService/DESIGN_DECISIONS.md" />
+    <File Path="../Docs/ClearHostedService/DOCUMENTATION_INDEX.md" />
+    <File Path="../Docs/ClearHostedService/FAQ.md" />
+    <File Path="../Docs/ClearHostedService/PROJECT_SUMMARY.md" />
+    <File Path="../Docs/ClearHostedService/USAGE.md" />
+  </Folder>
   <Folder Name="/Example/">
     <Project Path="examples/DataProcessorService/DataProcessorService.csproj" />
     <Project Path="examples/NServiceBusEndpoint/NServiceBusEndpoint.csproj" />
