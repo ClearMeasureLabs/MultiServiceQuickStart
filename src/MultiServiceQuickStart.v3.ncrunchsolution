@@ -1,5 +1,8 @@
 ﻿<SolutionConfiguration>
   <Settings>
+    <AdditionalFilesToIncludeForSolution>
+      <Value>QuickHostedService.sln</Value>
+    </AdditionalFilesToIncludeForSolution>
     <AllowParallelTestExecution>True</AllowParallelTestExecution>
     <EnableRDI>True</EnableRDI>
     <RdiConfigured>True</RdiConfigured>

@@ -16,6 +16,14 @@
     Output directory for NuGet packages. Default: ./artifacts/packages
 .PARAMETER VerboseOutput
     Enable verbose output
+.PARAMETER EnableCodeCoverage
+    Enable code coverage collection during tests
+.PARAMETER GenerateTestReport
+    Generate detailed test reports
+.PARAMETER TestOnly
+    Only run tests (skip build)
+.PARAMETER PackOnly
+    Only create packages (skip build and tests)
 .EXAMPLE
     .\build.ps1
 .EXAMPLE
@@ -26,13 +34,16 @@
     .\build.ps1 -Pack
 .EXAMPLE
     .\build.ps1 -Pack -PackageOutputPath "C:\packages"
+.EXAMPLE
+    .\build.ps1 -EnableCodeCoverage -GenerateTestReport
+.EXAMPLE
+    .\build.ps1 -TestOnly -EnableCodeCoverage
 #>
 
 [CmdletBinding()]
 param(
     [ValidateSet('Debug', 'Release')]
     [string]$Configuration = 'Release',
-    
     
     [switch]$SkipTests,
     
@@ -42,7 +53,15 @@ param(
     
     [string]$PackageOutputPath,
     
-    [switch]$VerboseOutput
+    [switch]$VerboseOutput,
+    
+    [switch]$EnableCodeCoverage,
+    
+    [switch]$GenerateTestReport,
+    
+    [switch]$TestOnly,
+    
+    [switch]$PackOnly
 )
 
 $ErrorActionPreference = 'Stop'
@@ -55,6 +74,7 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 # Script variables
 $scriptPath = if ($PSScriptRoot) { $PSScriptRoot } else { Get-Location }
 $solutionName = "ClearHostedService"
+$testResultsPath = Join-Path $scriptPath "TestResults"
 
 # Set default package output path if not provided
 if (-not $PackageOutputPath) {
@@ -285,6 +305,12 @@ Write-Header "Running Tests"
 try {
     $verbosityLevel = if ($VerboseOutput) { "normal" } else { "minimal" }
         
+    # Ensure TestResults directory exists
+    if (Test-Path $testResultsPath) {
+        Remove-Item $testResultsPath -Recurse -Force -ErrorAction SilentlyContinue
+    }
+    New-Item -ItemType Directory -Path $testResultsPath -Force | Out-Null
+        
     # Test each test project individually
     $testProjects = @(
         "ClearHostedService.Tests\ClearHostedService.Tests.csproj",
@@ -292,11 +318,18 @@ try {
     )
         
     $allTestsPassed = $true
+    $testCounter = 0
         
     foreach ($project in $testProjects) {
         $projectPath = Join-Path $scriptPath $project
         if (Test-Path $projectPath) {
-            Write-Info "Testing $(Split-Path $project -Leaf)"
+            $testCounter++
+            $projectName = [System.IO.Path]::GetFileNameWithoutExtension($project)
+            Write-Info "Testing $projectName"
+                
+            # Create project-specific test results directory
+            $projectTestResultsPath = Join-Path $testResultsPath $projectName
+            New-Item -ItemType Directory -Path $projectTestResultsPath -Force | Out-Null
                 
             $testArgs = @(
                 "test"
@@ -305,15 +338,34 @@ try {
                 "--no-build"
                 "--no-restore"
                 "--verbosity", $verbosityLevel
-                "--logger", "trx"
+                "--results-directory", $projectTestResultsPath
+                "--logger", "trx;LogFileName=test-results.trx"
                 "--logger", "console;verbosity=normal"
             )
+                
+            # Add code coverage if requested
+            if ($EnableCodeCoverage) {
+                Write-Info "  Collecting code coverage for $projectName"
+                $coverageFileName = "coverage-$projectName.cobertura.xml"
+                $testArgs += "--collect:XPlat Code Coverage"
+                $testArgs += "--"
+                $testArgs += "DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura"
+            }
+                
+            # Add detailed test reporting if requested
+            if ($GenerateTestReport) {
+                $testArgs += "--logger"
+                $testArgs += "html;LogFileName=test-results.html"
+            }
                 
             dotnet @testArgs
                 
             if ($LASTEXITCODE -ne 0) {
                 $allTestsPassed = $false
-                Write-Warning "Tests failed for $project"
+                Write-Warning "Tests failed for $projectName"
+            }
+            else {
+                Write-Success "Tests passed for $projectName"
             }
         }
         else {
@@ -321,20 +373,50 @@ try {
         }
     }
         
+    # Process code coverage if enabled
+    if ($EnableCodeCoverage) {
+        Write-Info "Processing code coverage results..."
+        $coverageOutputPath = Join-Path $testResultsPath "Coverage"
+        New-Item -ItemType Directory -Path $coverageOutputPath -Force | Out-Null
+            
+        # Find all coverage files and copy them to a central location
+        $coverageFiles = Get-ChildItem -Path $testResultsPath -Recurse -Filter "coverage.cobertura.xml" -ErrorAction SilentlyContinue
+        $coverageCounter = 0
+        foreach ($coverageFile in $coverageFiles) {
+            $coverageCounter++
+            $targetFileName = "coverage-$coverageCounter.cobertura.xml"
+            Copy-Item $coverageFile.FullName -Destination (Join-Path $coverageOutputPath $targetFileName) -Force
+        }
+            
+        if ($coverageCounter -gt 0) {
+            Write-Success "Code coverage collected: $coverageCounter file(s)"
+            Write-Info "Coverage location: $coverageOutputPath"
+        }
+        else {
+            Write-Warning "No code coverage files found"
+        }
+    }
+        
+    # Generate test summary
+    Write-Host ""
+    Write-Info "Test Execution Summary:"
+    Write-Info "  Projects tested: $testCounter"
+    Write-Info "  Results location: $testResultsPath"
+        
     if (-not $allTestsPassed) {
         throw "One or more test projects failed"
     }
         
-        if ($LASTEXITCODE -ne 0) {
-            throw "Tests failed with exit code $LASTEXITCODE"
-        }
+    if ($LASTEXITCODE -ne 0) {
+        throw "Tests failed with exit code $LASTEXITCODE"
+    }
         
-        Write-Success "All tests passed"
-    }
-    catch {
-        Write-Error "Tests failed: $_"
-        exit 1
-    }
+    Write-Success "All tests passed"
+}
+catch {
+    Write-Error "Tests failed: $_"
+    exit 1
+}
 }
 
 function Invoke-Pack {
@@ -419,14 +501,20 @@ function Show-Summary {
 param(
     [DateTime]$StartTime,
     [bool]$TestsRun,
-    [bool]$PackagesCreated
+    [bool]$PackagesCreated,
+    [bool]$CodeCoverageEnabled,
+    [string]$Mode
 )
     
 $duration = (Get-Date) - $StartTime
     
 Write-Header "Build Summary"
+Write-Info "Mode: $Mode"
 Write-Info "Configuration: $Configuration"
 Write-Info "Tests Run: $(if ($TestsRun) { 'Yes' } else { 'No (Skipped)' })"
+if ($CodeCoverageEnabled) {
+    Write-Info "Code Coverage: Enabled"
+}
 Write-Info "Packages Created: $(if ($PackagesCreated) { 'Yes' } else { 'No' })"
     Write-Info "Duration: $($duration.ToString('mm\:ss'))"
     Write-Success "BUILD SUCCESSFUL"
@@ -440,9 +528,36 @@ try {
     Write-BoxedMessage "ClearHostedService Build Script"
     Write-Host ""
     
-    # Check prerequisites
+    # Determine execution mode
+    $executionMode = "Full Build"
+    if ($TestOnly) {
+        $executionMode = "Test Only"
+    }
+    elseif ($PackOnly) {
+        $executionMode = "Pack Only"
+    }
+    
+    Write-Info "Execution Mode: $executionMode"
+    Write-Host ""
+    
+    # Check prerequisites (always)
     Test-Prerequisites
     
+    # Handle TestOnly mode
+    if ($TestOnly) {
+        Invoke-Test
+        Show-Summary -StartTime $startTime -TestsRun $true -PackagesCreated $false -CodeCoverageEnabled $EnableCodeCoverage -Mode $executionMode
+        exit 0
+    }
+    
+    # Handle PackOnly mode
+    if ($PackOnly) {
+        Invoke-Pack
+        Show-Summary -StartTime $startTime -TestsRun $false -PackagesCreated $true -CodeCoverageEnabled $false -Mode $executionMode
+        exit 0
+    }
+    
+    # Standard build flow
     # Clean if requested
     if ($Clean) {
         Invoke-Clean
@@ -472,7 +587,7 @@ try {
     }
     
     # Show summary
-    Show-Summary -StartTime $startTime -TestsRun $testsRun -PackagesCreated $packagesCreated
+    Show-Summary -StartTime $startTime -TestsRun $testsRun -PackagesCreated $packagesCreated -CodeCoverageEnabled $EnableCodeCoverage -Mode $executionMode
     
     exit 0
 }
