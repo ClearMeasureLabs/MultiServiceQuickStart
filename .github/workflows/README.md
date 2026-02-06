@@ -69,6 +69,13 @@ Publishes NuGet packages to GitHub Package Registry.
 https://nuget.pkg.github.com/ClearMeasureLabs/index.json
 ```
 
+**Version Management:**
+- Package versions are automatically incremented using the format `1.0.{run_number}`
+- The `run_number` is provided by GitHub Actions and increments with each workflow run
+- This ensures each push to main creates unique package versions
+- If a duplicate version is detected, the workflow will fail with an error
+- The `--skip-duplicate` flag is NOT used to ensure version conflicts are caught early
+
 ##### 3. Publish Release to GitHub Packages
 
 Publishes release packages and attaches them to the GitHub release.
@@ -98,6 +105,7 @@ The workflows leverage the `src/build.ps1` PowerShell script for all build opera
 | `-Pack` | Create NuGet packages | ✅ Yes (pack step) |
 | `-PackOnly` | Only create packages | ✅ Yes (pack step) |
 | `-PackageOutputPath` | Package output directory | ✅ Yes (custom path) |
+| `-Version` | Version number for packages | ✅ Yes (1.0.{run_number}) |
 | `-Clean` | Clean before build | ❌ No (fresh checkout) |
 | `-VerboseOutput` | Verbose MSBuild output | ❌ No (uses defaults) |
 

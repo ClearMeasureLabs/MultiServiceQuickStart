@@ -14,6 +14,8 @@
     Create NuGet packages for library projects
 .PARAMETER PackageOutputPath
     Output directory for NuGet packages. Default: ./artifacts/packages
+.PARAMETER Version
+    Version number for NuGet packages. Default: 0.0.999 for local builds
 .PARAMETER VerboseOutput
     Enable verbose output
 .PARAMETER EnableCodeCoverage
@@ -35,6 +37,8 @@
 .EXAMPLE
     .\build.ps1 -Pack -PackageOutputPath "C:\packages"
 .EXAMPLE
+    .\build.ps1 -Pack -Version "1.0.5"
+.EXAMPLE
     .\build.ps1 -EnableCodeCoverage -GenerateTestReport
 .EXAMPLE
     .\build.ps1 -TestOnly -EnableCodeCoverage
@@ -52,6 +56,8 @@ param(
     [switch]$Pack,
     
     [string]$PackageOutputPath,
+    
+    [string]$Version = "0.0.999",
     
     [switch]$VerboseOutput,
     
@@ -484,6 +490,12 @@ function Invoke-Pack {
                     "--output", $PackageOutputPath
                     "--verbosity", $verbosityLevel
                 )
+                
+                # Add version if specified
+                if ($Version) {
+                    $packArgs += "-p:Version=$Version"
+                    Write-Info "Using version: $Version"
+                }
                 
                 # Add include symbols option for Release builds
                 if ($Configuration -eq "Release") {

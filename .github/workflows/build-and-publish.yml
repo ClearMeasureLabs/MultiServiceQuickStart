@@ -99,7 +99,9 @@ jobs:
       if: github.event_name == 'push' || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
       run: |
         cd src
-        .\build.ps1 -Configuration Release -PackOnly -PackageOutputPath "${{ github.workspace }}/packages"
+        $version = "1.0.${{ github.run_number }}"
+        Write-Host "Creating packages with version: $version"
+        .\build.ps1 -Configuration Release -PackOnly -PackageOutputPath "${{ github.workspace }}/packages" -Version $version
       shell: pwsh
     
     - name: Upload NuGet packages
@@ -133,9 +135,18 @@ jobs:
     
     - name: Publish to GitHub Packages
       run: |
+        $hasError = $false
         Get-ChildItem -Path packages -Filter *.nupkg -Recurse | ForEach-Object {
           Write-Host "Publishing $($_.Name)..."
-          dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
+          dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          if ($LASTEXITCODE -ne 0) {
+            $hasError = $true
+            Write-Error "Failed to publish $($_.Name)"
+          }
+        }
+        if ($hasError) {
+          Write-Error "One or more packages failed to publish. This may indicate duplicate versions."
+          exit 1
         }
       shell: pwsh
     
@@ -173,9 +184,18 @@ jobs:
     
     - name: Publish to GitHub Packages
       run: |
+        $hasError = $false
         Get-ChildItem -Path packages -Filter *.nupkg -Recurse | ForEach-Object {
           Write-Host "Publishing release package $($_.Name)..."
-          dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" --skip-duplicate
+          dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
+          if ($LASTEXITCODE -ne 0) {
+            $hasError = $true
+            Write-Error "Failed to publish $($_.Name)"
+          }
+        }
+        if ($hasError) {
+          Write-Error "One or more packages failed to publish. This may indicate duplicate versions."
+          exit 1
         }
       shell: pwsh
       env:
