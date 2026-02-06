@@ -61,13 +61,19 @@ Publishes NuGet packages to GitHub Package Registry.
 **Steps:**
 1. Download NuGet packages from build job
 2. Setup .NET with GitHub Packages authentication
-3. Push all `.nupkg` files to GitHub Package Registry
+3. Push main `.nupkg` files to GitHub Package Registry (excluding symbol packages)
 4. Generate publish summary in GitHub Actions UI
 
 **Package Location:**
 ```
 https://nuget.pkg.github.com/ClearMeasureLabs/index.json
 ```
+
+**Symbol Packages:**
+- GitHub Packages does **not** support symbol packages (`.symbols.nupkg` or `.snupkg`)
+- The workflow automatically excludes symbol packages when pushing to GitHub Packages
+- Symbol packages are still created during the build and available in the artifacts for debugging
+- For debugging with symbols, use embedded symbols and Source Link (configured in the build)
 
 **Version Management:**
 - Package versions are automatically incremented using the format `1.0.{run_number}`

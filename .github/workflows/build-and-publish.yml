@@ -136,7 +136,9 @@ jobs:
     - name: Publish to GitHub Packages
       run: |
         $hasError = $false
-        Get-ChildItem -Path packages -Filter *.nupkg -Recurse | ForEach-Object {
+        # GitHub Packages does not support symbol packages (.symbols.nupkg)
+        # Only push main packages (.nupkg) and exclude symbol packages
+        Get-ChildItem -Path packages -Filter *.nupkg -Recurse | Where-Object { $_.Name -notlike "*.symbols.nupkg" } | ForEach-Object {
           Write-Host "Publishing $($_.Name)..."
           dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
           if ($LASTEXITCODE -ne 0) {
@@ -152,7 +154,8 @@ jobs:
     
     - name: Publish Summary
       run: |
-        $packages = Get-ChildItem -Path packages -Filter *.nupkg -Recurse
+        # Only list main packages (not symbol packages)
+        $packages = Get-ChildItem -Path packages -Filter *.nupkg -Recurse | Where-Object { $_.Name -notlike "*.symbols.nupkg" }
         Write-Output "## 📦 Published Packages" >> $env:GITHUB_STEP_SUMMARY
         Write-Output "" >> $env:GITHUB_STEP_SUMMARY
         Write-Output "| Package | Version |" >> $env:GITHUB_STEP_SUMMARY
@@ -185,7 +188,9 @@ jobs:
     - name: Publish to GitHub Packages
       run: |
         $hasError = $false
-        Get-ChildItem -Path packages -Filter *.nupkg -Recurse | ForEach-Object {
+        # GitHub Packages does not support symbol packages (.symbols.nupkg)
+        # Only push main packages (.nupkg) and exclude symbol packages
+        Get-ChildItem -Path packages -Filter *.nupkg -Recurse | Where-Object { $_.Name -notlike "*.symbols.nupkg" } | ForEach-Object {
           Write-Host "Publishing release package $($_.Name)..."
           dotnet nuget push $_.FullName --api-key ${{ secrets.GITHUB_TOKEN }} --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json"
           if ($LASTEXITCODE -ne 0) {
