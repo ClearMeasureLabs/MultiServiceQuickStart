@@ -1,0 +1,232 @@
+name: "CodeQL Security Analysis"
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run at 2 AM UTC every day
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '10.0.x'
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  analyze:
+    name: Analyze Code with CodeQL
+    runs-on: windows-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      pull-requests: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'csharp' ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+        # Use security-extended query suite for more comprehensive security analysis
+        # Available suites: security-extended, security-and-quality
+        queries: security-extended
+
+    # Build the project for CodeQL analysis
+    - name: Build solution
+      run: |
+        cd src
+        .\build.ps1 -Configuration Release -SkipTests
+      shell: pwsh
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{matrix.language}}"
+        # Upload results to GitHub Security tab
+        upload: true
+        # Checkout the alerts after upload and fail on critical/high severity
+        output: sarif-results
+        upload-database: true
+
+    # Check results and fail on critical/high severity issues
+    - name: Check SARIF results for critical/high severity issues
+      if: always()
+      shell: pwsh
+      run: |
+        $sarifFiles = Get-ChildItem -Path "sarif-results" -Filter "*.sarif" -Recurse -ErrorAction SilentlyContinue
+        
+        if ($sarifFiles.Count -eq 0) {
+          Write-Host "No SARIF files found. CodeQL analysis may still be processing."
+          exit 0
+        }
+        
+        $criticalCount = 0
+        $highCount = 0
+        $mediumCount = 0
+        $lowCount = 0
+        $allIssues = @()
+        
+        foreach ($sarifFile in $sarifFiles) {
+          Write-Host "Analyzing SARIF file: $($sarifFile.Name)"
+          $sarif = Get-Content $sarifFile.FullName -Raw | ConvertFrom-Json
+          
+          foreach ($run in $sarif.runs) {
+            foreach ($result in $run.results) {
+              $severity = "unknown"
+              $securitySeverity = "unknown"
+              
+              # Get severity from properties
+              if ($result.properties.'security-severity') {
+                $securitySeverityScore = [double]$result.properties.'security-severity'
+                if ($securitySeverityScore -ge 9.0) {
+                  $securitySeverity = "critical"
+                  $criticalCount++
+                } elseif ($securitySeverityScore -ge 7.0) {
+                  $securitySeverity = "high"
+                  $highCount++
+                } elseif ($securitySeverityScore -ge 4.0) {
+                  $securitySeverity = "medium"
+                  $mediumCount++
+                } else {
+                  $securitySeverity = "low"
+                  $lowCount++
+                }
+              } else {
+                # Fallback to level if security-severity not present
+                $severity = $result.level
+                if ($severity -eq "error") {
+                  $highCount++
+                  $securitySeverity = "high"
+                } elseif ($severity -eq "warning") {
+                  $mediumCount++
+                  $securitySeverity = "medium"
+                } else {
+                  $lowCount++
+                  $securitySeverity = "low"
+                }
+              }
+              
+              # Store issue details
+              $ruleId = $result.ruleId
+              $message = $result.message.text
+              $location = "unknown"
+              if ($result.locations -and $result.locations.Count -gt 0) {
+                $loc = $result.locations[0].physicalLocation
+                if ($loc.artifactLocation.uri) {
+                  $location = $loc.artifactLocation.uri
+                  if ($loc.region.startLine) {
+                    $location += ":$($loc.region.startLine)"
+                  }
+                }
+              }
+              
+              $allIssues += [PSCustomObject]@{
+                Severity = $securitySeverity
+                RuleId = $ruleId
+                Message = $message
+                Location = $location
+              }
+            }
+          }
+        }
+        
+        # Generate summary
+        Write-Host ""
+        Write-Host "======================================"
+        Write-Host "CodeQL Security Analysis Results"
+        Write-Host "======================================"
+        Write-Host "Critical Severity Issues: $criticalCount"
+        Write-Host "High Severity Issues: $highCount"
+        Write-Host "Medium Severity Issues: $mediumCount"
+        Write-Host "Low Severity Issues: $lowCount"
+        Write-Host "======================================"
+        Write-Host ""
+        
+        # Show critical and high severity issues
+        if ($criticalCount -gt 0 -or $highCount -gt 0) {
+          Write-Host "BLOCKING ISSUES FOUND:"
+          Write-Host ""
+          
+          $blockingIssues = $allIssues | Where-Object { $_.Severity -eq "critical" -or $_.Severity -eq "high" }
+          foreach ($issue in $blockingIssues | Select-Object -First 10) {
+            Write-Host "[$($issue.Severity.ToUpper())] $($issue.RuleId)"
+            Write-Host "  Message: $($issue.Message)"
+            Write-Host "  Location: $($issue.Location)"
+            Write-Host ""
+          }
+          
+          if ($blockingIssues.Count -gt 10) {
+            Write-Host "... and $($blockingIssues.Count - 10) more blocking issues"
+            Write-Host ""
+          }
+          
+          # Create GitHub Step Summary
+          $summary = @"
+        ## 🚨 CodeQL Security Analysis - Blocking Issues Found
+        
+        | Severity | Count |
+        |----------|-------|
+        | Critical | $criticalCount |
+        | High | $highCount |
+        | Medium | $mediumCount |
+        | Low | $lowCount |
+        
+        ### Critical and High Severity Issues
+        
+        "@ 
+          
+          foreach ($issue in $blockingIssues | Select-Object -First 5) {
+            $summary += "- **[$($issue.Severity.ToUpper())] $($issue.RuleId)**: $($issue.Message)`n"
+            $summary += "  - Location: ``$($issue.Location)```n`n"
+          }
+          
+          if ($blockingIssues.Count -gt 5) {
+            $summary += "`n... and $($blockingIssues.Count - 5) more blocking issues`n"
+          }
+          
+          $summary += "`n**Action Required:** Please address these security issues before merging.`n"
+          
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          
+          Write-Host "##[error]Found $criticalCount critical and $highCount high severity security issues. Build cannot proceed."
+          exit 1
+        } else {
+          Write-Host "✅ No critical or high severity security issues found!"
+          
+          $summary = @"
+        ## ✅ CodeQL Security Analysis Passed
+        
+        | Severity | Count |
+        |----------|-------|
+        | Critical | 0 |
+        | High | 0 |
+        | Medium | $mediumCount |
+        | Low | $lowCount |
+        
+        No blocking security issues detected.
+        "@ 
+          
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append
+          exit 0
+        }
+
