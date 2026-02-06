@@ -11,7 +11,7 @@ public class ClearHostedEndpointTests
     public async Task StartAsync_WithLearningTransport_ShouldStartSuccessfully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -39,7 +39,7 @@ public class ClearHostedEndpointTests
     public async Task StartAsync_ShouldCallLifecycleMethods_InCorrectOrder()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var callOrder = new List<string>();
 
         try
@@ -64,7 +64,7 @@ public class ClearHostedEndpointTests
     public async Task EndpointInstance_BeforeStart_ShouldThrowInvalidOperationException()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act & Assert
         var act = () =>
@@ -84,7 +84,7 @@ public class ClearHostedEndpointTests
     public async Task StopAsync_ShouldStopEndpoint_Gracefully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -106,7 +106,7 @@ public class ClearHostedEndpointTests
     public void EffectiveEndpointName_WithNoCustomName_ShouldUseTypeName()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         var effectiveName = endpoint.GetType()
@@ -124,7 +124,7 @@ public class ClearHostedEndpointTests
     {
         // Arrange
         var customName = "MyCustomEndpoint";
-        var endpoint = new CustomNamedEndpoint(customName);
+        var endpoint = new CustomNamedEndpoint(TestHelpers.CreateTestConfiguration(), customName);
 
         // Act
         var effectiveName = endpoint.GetType()
@@ -141,7 +141,7 @@ public class ClearHostedEndpointTests
     public async Task StartAsync_WithFaultyTransport_ShouldThrowEndpointConfigurationException()
     {
         // Arrange
-        var endpoint = new FaultyTransportEndpoint();
+        var endpoint = new FaultyTransportEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);
@@ -157,7 +157,7 @@ public class ClearHostedEndpointTests
     public async Task ExecuteAsync_ShouldKeepServiceAlive_UntilCancellationRequested()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var cts = new CancellationTokenSource();
 
         try
@@ -184,7 +184,7 @@ public class ClearHostedEndpointTests
     public void Dispose_ShouldCleanupResources()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         endpoint.Dispose();
@@ -196,7 +196,7 @@ public class ClearHostedEndpointTests
     public void Dispose_CalledMultipleTimes_ShouldNotThrow()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         endpoint.Dispose();

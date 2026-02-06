@@ -9,7 +9,7 @@ public class ErrorHandlingTests
     public async Task Endpoint_WithInvalidTransportConfiguration_ShouldThrowEndpointConfigurationException()
     {
         // Arrange
-        var endpoint = new FaultyTransportEndpoint();
+        var endpoint = new FaultyTransportEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);
@@ -29,7 +29,7 @@ public class ErrorHandlingTests
         {
             ConnectionString = null
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);
@@ -50,7 +50,7 @@ public class ErrorHandlingTests
         {
             ConnectionString = string.Empty
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);
@@ -67,7 +67,7 @@ public class ErrorHandlingTests
     public void Dispose_CalledMultipleTimes_ShouldHandleGracefully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act & Assert
         endpoint.Dispose();
@@ -79,7 +79,7 @@ public class ErrorHandlingTests
     public async Task StopAsync_BeforeStartAsync_ShouldHandleGracefully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -98,7 +98,7 @@ public class ErrorHandlingTests
     public async Task StopAsync_WithVeryShortTimeout_ShouldAttemptGracefulShutdown()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(1));
 
         try

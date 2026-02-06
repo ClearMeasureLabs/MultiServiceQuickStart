@@ -9,7 +9,7 @@ public class EndpointLifecycleTests
     public async Task StartAsync_ThenStopAsync_ShouldCompleteSuccessfully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act & Assert
         await endpoint.StartAsync(CancellationToken.None);
@@ -23,7 +23,7 @@ public class EndpointLifecycleTests
     public async Task OnStoppingAsync_ShouldBeCalledDuringShutdown()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -47,7 +47,7 @@ public class EndpointLifecycleTests
     public async Task StopAsync_WithCancellationToken_ShouldRespectCancellation()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var cts = new CancellationTokenSource();
 
         try
@@ -71,7 +71,7 @@ public class EndpointLifecycleTests
     public async Task Dispose_AfterStop_ShouldNotThrow()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         await endpoint.StartAsync(CancellationToken.None);
         await Task.Delay(500);
@@ -87,7 +87,7 @@ public class EndpointLifecycleTests
     public async Task Dispose_WithoutStop_ShouldNotThrow()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         await endpoint.StartAsync(CancellationToken.None);
         await Task.Delay(500);
@@ -102,7 +102,7 @@ public class EndpointLifecycleTests
     public void Dispose_WithoutStart_ShouldNotThrow()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         endpoint.Dispose();
@@ -114,9 +114,9 @@ public class EndpointLifecycleTests
     public async Task MultipleEndpoints_CanRunConcurrently()
     {
         // Arrange
-        var endpoint1 = new TestEndpoint();
-        var endpoint2 = new TestEndpoint();
-        var endpoint3 = new TestEndpoint();
+        var endpoint1 = new TestEndpoint(TestHelpers.CreateTestConfiguration());
+        var endpoint2 = new TestEndpoint(TestHelpers.CreateTestConfiguration());
+        var endpoint3 = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {

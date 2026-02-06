@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Data;
 using System.Data.Common;
@@ -22,9 +23,11 @@ public class TestEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoint
     private readonly Action<EndpointConfiguration>? _transportConfigurator;
 
     public TestEndpoint(
+        IConfiguration? configuration = null,
         EndpointOptions? endpointOptions = null,
         SqlPersistenceOptions? sqlPersistenceOptions = null,
         Action<EndpointConfiguration>? transportConfigurator = null)
+        : base(configuration ?? new ConfigurationBuilder().Build())
     {
         _customEndpointOptions = endpointOptions;
         _customSqlPersistenceOptions = sqlPersistenceOptions;
@@ -92,6 +95,9 @@ public class TestEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoint
 /// </summary>
 public class FaultyTransportEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoint
 {
+    public FaultyTransportEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
     {
         throw new InvalidOperationException("Transport configuration failed");
@@ -105,7 +111,7 @@ public class CustomNamedEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoi
 {
     private readonly string _endpointName;
 
-    public CustomNamedEndpoint(string endpointName)
+    public CustomNamedEndpoint(IConfiguration configuration, string endpointName) : base(configuration)
     {
         _endpointName = endpointName;
     }
@@ -125,7 +131,7 @@ public class SqlPersistenceEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEnd
 {
     private readonly SqlPersistenceOptions _sqlOptions;
 
-    public SqlPersistenceEndpoint(SqlPersistenceOptions sqlOptions)
+    public SqlPersistenceEndpoint(IConfiguration configuration, SqlPersistenceOptions sqlOptions) : base(configuration)
     {
         _sqlOptions = sqlOptions;
     }
@@ -198,6 +204,10 @@ public class MockDbConnection : DbConnection
 /// </summary>
 public class CustomRecoverabilityEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoint
 {
+    public CustomRecoverabilityEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
+
     public int CustomImmediateRetries { get; set; } = 5;
     public int CustomDelayedRetries { get; set; } = 10;
 
@@ -219,6 +229,9 @@ public class CustomRecoverabilityEndpoint : ClearMeasure.HostedEndpoint.ClearHos
 /// </summary>
 public class DependencyInjectionEndpoint : ClearMeasure.HostedEndpoint.ClearHostedEndpoint
 {
+    public DependencyInjectionEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
     {
         endpointConfiguration.UseTransport<LearningTransport>();

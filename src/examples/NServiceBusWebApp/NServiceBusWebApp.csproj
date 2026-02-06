@@ -11,4 +11,8 @@
     <PackageReference Include="NServiceBus.Extensions.Hosting" Version="3.*" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBusEndpoint\NServiceBusEndpoint.csproj" />
+  </ItemGroup>
+
 </Project>

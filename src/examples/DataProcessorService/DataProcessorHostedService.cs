@@ -1,6 +1,7 @@
 using ClearMeasure.HostedService;
 using DataProcessorService.Models;
 using DataProcessorService.Services;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -11,6 +12,9 @@ namespace DataProcessorService;
 /// </summary>
 public class DataProcessorHostedService : ClearHostedService
 {
+    public DataProcessorHostedService(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
         // Register configuration

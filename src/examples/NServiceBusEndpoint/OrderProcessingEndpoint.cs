@@ -1,6 +1,6 @@
 using ClearMeasure.HostedEndpoint;
 using ClearMeasure.HostedEndpoint.Configuration;
-
+using Microsoft.Extensions.Configuration;
 using NServiceBus;
 
 namespace NServiceBusEndpoint;
@@ -11,6 +11,9 @@ namespace NServiceBusEndpoint;
 /// </summary>
 public class OrderProcessingEndpoint : ClearHostedEndpoint
 {
+    public OrderProcessingEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
     /// <summary>
     /// Configure endpoint options for the order processing endpoint.
     /// </summary>

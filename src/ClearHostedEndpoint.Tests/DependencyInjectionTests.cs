@@ -11,7 +11,7 @@ public class DependencyInjectionTests
     public async Task Endpoint_WithRegisteredDependencies_ShouldResolveServices()
     {
         // Arrange
-        var endpoint = new DependencyInjectionEndpoint();
+        var endpoint = new DependencyInjectionEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -32,8 +32,8 @@ public class DependencyInjectionTests
     public async Task Endpoint_ShouldHaveIsolatedServiceProvider()
     {
         // Arrange
-        var endpoint1 = new DependencyInjectionEndpoint();
-        var endpoint2 = new DependencyInjectionEndpoint();
+        var endpoint1 = new DependencyInjectionEndpoint(TestHelpers.CreateTestConfiguration());
+        var endpoint2 = new DependencyInjectionEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -57,7 +57,7 @@ public class DependencyInjectionTests
     public async Task RegisterDependencyInjection_ShouldBeCalledDuringStartup()
     {
         // Arrange
-        var endpoint = new DependencyInjectionEndpoint();
+        var endpoint = new DependencyInjectionEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -78,7 +78,7 @@ public class DependencyInjectionTests
     public void CreateServiceCollection_ShouldReturnNewServiceCollection()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         // Act
         var method = endpoint.GetType()

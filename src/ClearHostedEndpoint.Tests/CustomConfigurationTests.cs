@@ -9,7 +9,7 @@ public class CustomConfigurationTests
     public async Task CustomRecoverabilityEndpoint_ShouldUseCustomRetrySettings()
     {
         // Arrange
-        var endpoint = new CustomRecoverabilityEndpoint
+        var endpoint = new CustomRecoverabilityEndpoint(TestHelpers.CreateTestConfiguration())
         {
             CustomImmediateRetries = 5,
             CustomDelayedRetries = 10
@@ -35,7 +35,7 @@ public class CustomConfigurationTests
     {
         // Arrange
         var customName = "MyCustomEndpoint";
-        var endpoint = new CustomNamedEndpoint(customName);
+        var endpoint = new CustomNamedEndpoint(TestHelpers.CreateTestConfiguration(), customName);
 
         try
         {
@@ -66,7 +66,7 @@ public class CustomConfigurationTests
         {
             ConnectionString = "Server=localhost;Database=Test;"
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
         var connectionString = "Server=localhost;Database=Test;";
 
         // Act
@@ -86,7 +86,7 @@ public class CustomConfigurationTests
     public async Task Endpoint_WithCustomSerialization_CanOverrideDefault()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -108,7 +108,7 @@ public class CustomConfigurationTests
     public async Task Endpoint_ConfigureEndpointAsync_AllowsAsyncConfiguration()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -134,7 +134,7 @@ public class CustomConfigurationTests
     public async Task Endpoint_WithVariousNames_ShouldHandleCorrectly(string endpointName)
     {
         // Arrange
-        var endpoint = new CustomNamedEndpoint(endpointName);
+        var endpoint = new CustomNamedEndpoint(TestHelpers.CreateTestConfiguration(), endpointName);
 
         try
         {
@@ -170,7 +170,7 @@ public class CustomConfigurationTests
             EnableOutbox = false
         };
 
-        var endpoint = new TestEndpoint(endpointOptions: endpointOptions);
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration(), endpointOptions: endpointOptions);
 
         try
         {

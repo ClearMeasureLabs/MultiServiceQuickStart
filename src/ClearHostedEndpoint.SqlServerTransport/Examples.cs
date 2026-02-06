@@ -1,5 +1,6 @@
 using ClearMeasure.HostedEndpoint;
 using ClearMeasure.HostedEndpoint.SqlServerTransport;
+using Microsoft.Extensions.Configuration;
 using NServiceBus;
 
 namespace YourNamespace;
@@ -9,6 +10,9 @@ namespace YourNamespace;
 /// </summary>
 public class SimpleEndpoint : ClearHostedEndpoint
 {
+    public SimpleEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
     {
         // Single line configuration with SQL Server transport
@@ -21,6 +25,9 @@ public class SimpleEndpoint : ClearHostedEndpoint
 /// </summary>
 public class CustomEndpoint : ClearHostedEndpoint
 {
+    public CustomEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override void ConfigureTransport(EndpointConfiguration endpointConfiguration)
     {
         var options = new SqlServerTransportOptions

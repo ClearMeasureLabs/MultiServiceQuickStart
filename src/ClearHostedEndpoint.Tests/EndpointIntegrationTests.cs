@@ -9,7 +9,7 @@ public class EndpointIntegrationTests
     public async Task FullLifecycle_StartWorkStop_ShouldCompleteSuccessfully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -36,10 +36,12 @@ public class EndpointIntegrationTests
     {
         // Arrange
         var endpoint1 = new TestEndpoint(
+            TestHelpers.CreateTestConfiguration(),
             endpointOptions: new EndpointOptions { EndpointName = "Endpoint1" });
         var endpoint2 = new TestEndpoint(
+            TestHelpers.CreateTestConfiguration(),
             endpointOptions: new EndpointOptions { EndpointName = "Endpoint2", MaxConcurrency = 5 });
-        var endpoint3 = new CustomNamedEndpoint("Endpoint3");
+        var endpoint3 = new CustomNamedEndpoint(TestHelpers.CreateTestConfiguration(), "Endpoint3");
 
         try
         {
@@ -70,7 +72,7 @@ public class EndpointIntegrationTests
     public async Task Endpoint_WithLongRunningWork_ShouldCancelGracefully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var cts = new CancellationTokenSource();
 
         try
@@ -106,8 +108,8 @@ public class EndpointIntegrationTests
             DelayedRetryCount = 2
         };
 
-        var endpoint = new DependencyInjectionEndpoint();
-        var customEndpointWithOptions = new TestEndpoint(endpointOptions: endpointOptions);
+        var endpoint = new DependencyInjectionEndpoint(TestHelpers.CreateTestConfiguration());
+        var customEndpointWithOptions = new TestEndpoint(TestHelpers.CreateTestConfiguration(), endpointOptions: endpointOptions);
 
         try
         {
@@ -163,7 +165,7 @@ public class EndpointIntegrationTests
     public async Task Endpoint_WithCustomRecoverability_ShouldApplySettings()
     {
         // Arrange
-        var endpoint = new CustomRecoverabilityEndpoint
+        var endpoint = new CustomRecoverabilityEndpoint(TestHelpers.CreateTestConfiguration())
         {
             CustomImmediateRetries = 7,
             CustomDelayedRetries = 3
@@ -188,7 +190,7 @@ public class EndpointIntegrationTests
     public async Task Endpoint_WithCancellationDuringStartup_ShouldHandleGracefully()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
         var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(100));
 
         try

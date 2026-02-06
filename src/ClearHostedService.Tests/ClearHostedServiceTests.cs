@@ -1,5 +1,6 @@
 using ClearMeasure.HostedService;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
@@ -14,6 +15,10 @@ public class TestHostedService : ClearHostedService
     public bool OnStoppingAsyncCalled { get; private set; }
     public bool ExecuteAsyncCalled { get; private set; }
     public bool RegisterDependencyInjectionCalled { get; private set; }
+
+    public TestHostedService(IConfiguration configuration) : base(configuration)
+    {
+    }
 
     protected override void RegisterDependencyInjection(IServiceCollection services)
     {
@@ -63,11 +68,18 @@ public class TestService : ITestService
 
 public class ClearHostedServiceTests
 {
+    private static IConfiguration CreateTestConfiguration()
+    {
+        return new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>())
+            .Build();
+    }
+
     [Fact]
     public async Task StartAsync_ShouldCallLifecycleMethods_InCorrectOrder()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
 
         // Act
         await service.StartAsync(CancellationToken.None);
@@ -85,7 +97,7 @@ public class ClearHostedServiceTests
     public async Task StartAsync_ShouldRegisterDependencies_Successfully()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
 
         // Act
         await service.StartAsync(CancellationToken.None);
@@ -100,7 +112,7 @@ public class ClearHostedServiceTests
     public async Task StopAsync_ShouldCallOnStoppingAsync()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
         await service.StartAsync(CancellationToken.None);
         await Task.Delay(100);
 
@@ -115,7 +127,7 @@ public class ClearHostedServiceTests
     public async Task ExecuteAsync_ShouldRespectCancellationToken()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
         await service.StartAsync(CancellationToken.None);
         await Task.Delay(50);
 
@@ -130,7 +142,7 @@ public class ClearHostedServiceTests
     public async Task ServiceProvider_ShouldResolveRegisteredServices()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
 
         // Act
         await service.StartAsync(CancellationToken.None);
@@ -145,7 +157,7 @@ public class ClearHostedServiceTests
     public void Dispose_ShouldNotThrow()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
 
         // Act & Assert
         var act = () => service.Dispose();
@@ -156,7 +168,7 @@ public class ClearHostedServiceTests
     public async Task MultipleStartStop_ShouldWork()
     {
         // Arrange
-        var service = new TestHostedService();
+        var service = new TestHostedService(CreateTestConfiguration());
 
         // Act
         await service.StartAsync(CancellationToken.None);
