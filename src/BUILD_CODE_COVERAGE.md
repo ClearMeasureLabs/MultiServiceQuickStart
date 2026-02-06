@@ -109,15 +109,14 @@ src/
     │   ├── test-results.trx         (Visual Studio Test Results)
     │   ├── test-results.html        (HTML Report - if GenerateTestReport)
     │   └── {guid}/
-    │       └── coverage.cobertura.xml (Coverage Data)
+    │       └── *.coverage           (Binary Coverage Data)
     ├── ClearHostedEndpoint.Tests/
     │   ├── test-results.trx
     │   ├── test-results.html
     │   └── {guid}/
-    │       └── coverage.cobertura.xml
+    │       └── *.coverage           (Binary Coverage Data)
     └── Coverage/
-        ├── coverage-1.cobertura.xml  (Consolidated)
-        └── coverage-2.cobertura.xml
+        └── coverage.cobertura.xml   (Merged Cobertura XML)
 ```
 
 ### File Descriptions
@@ -126,7 +125,8 @@ src/
 |------|--------|-------------|
 | `test-results.trx` | XML (TRX) | Visual Studio test results format |
 | `test-results.html` | HTML | Human-readable test report |
-| `coverage.cobertura.xml` | XML (Cobertura) | Code coverage data |
+| `*.coverage` | Binary | Native .NET code coverage data (per test run) |
+| `coverage.cobertura.xml` | XML (Cobertura) | Merged code coverage data from all test projects |
 
 ## Viewing Test Results
 
@@ -146,7 +146,7 @@ src/
 # View coverage summary
 dotnet tool install -g dotnet-reportgenerator-globaltool
 reportgenerator `
-  -reports:"TestResults/Coverage/*.xml" `
+  -reports:"TestResults/Coverage/coverage.cobertura.xml" `
   -targetdir:"TestResults/CoverageReport" `
   -reporttypes:Html
 
@@ -158,10 +158,11 @@ Start-Process TestResults/CoverageReport/index.html
 
 ### Coverage Collection
 
-The build script uses **Coverlet** for code coverage:
-- Cross-platform coverage collector
+The build script uses **Microsoft's dotnet-coverage** tool for code coverage:
+- Native .NET code coverage tool
 - Integrated with `dotnet test`
-- Outputs Cobertura XML format
+- Collects coverage in .NET's native format, then converts to Cobertura XML
+- Automatically merges coverage from multiple test projects
 
 ### Coverage Metrics
 
@@ -172,22 +173,36 @@ Collected metrics include:
 
 ### Coverage Configuration
 
-Coverage is collected with default settings:
-- Includes all projects under test
+Coverage is collected with the following process:
+1. Each test project runs with `--collect "Code Coverage"` to generate `.coverage` files
+2. The build script automatically installs `dotnet-coverage` tool if not present
+3. All coverage files are merged into a single Cobertura XML file
+4. Final output: `TestResults/Coverage/coverage.cobertura.xml`
+
+### How It Works
+
+```powershell
+# During test execution:
+dotnet test --collect "Code Coverage"
+
+# After all tests complete:
+dotnet-coverage merge --output coverage.cobertura.xml --output-format cobertura *.coverage
+```
+
+The merged coverage file includes:
+- All projects under test
 - Excludes test projects themselves
 - Excludes auto-generated code
 - Excludes third-party assemblies
 
 ### Customizing Coverage
 
-To customize coverage collection, modify the test arguments in `Invoke-Test`:
+To customize coverage collection, you can modify the test arguments in the `Invoke-Test` function in `build.ps1`. The dotnet-coverage tool supports various output formats including:
+- cobertura (default for this project)
+- coverage (binary format)
+- xml (detailed XML format)
 
-```powershell
-$testArgs += "--collect:XPlat Code Coverage"
-$testArgs += "--"
-$testArgs += "DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura"
-# Add more settings here
-```
+For more information, see: https://learn.microsoft.com/en-us/dotnet/core/additional-tools/dotnet-coverage
 
 ## GitHub Actions Integration
 
@@ -322,39 +337,42 @@ Remove-Item -Path src/TestResults -Recurse -Force -ErrorAction SilentlyContinue
 
 Track coverage trends over time:
 ```powershell
-# Extract coverage percentage from Cobertura report
-[xml]$coverage = Get-Content TestResults/Coverage/coverage-1.cobertura.xml
+# Extract coverage percentage from merged Cobertura report
+[xml]$coverage = Get-Content TestResults/Coverage/coverage.cobertura.xml
 $lineRate = [double]$coverage.coverage.'line-rate' * 100
 Write-Host "Line Coverage: $lineRate%"
 ```
 
 ## Additional Tools
 
+### dotnet-coverage (Microsoft Official Tool)
+```powershell
+# Install
+dotnet tool install -g dotnet-coverage
+
+# Collect coverage (alternative method)
+dotnet-coverage collect "dotnet test" -f cobertura -o coverage.cobertura.xml
+
+# Merge multiple coverage files
+dotnet-coverage merge -o merged.cobertura.xml -f cobertura *.coverage
+
+# Convert format
+dotnet-coverage merge -o coverage.xml -f xml coverage.coverage
+```
+
 ### ReportGenerator (Coverage HTML)
 ```powershell
 # Install
 dotnet tool install -g dotnet-reportgenerator-globaltool
 
-# Generate report
+# Generate report from merged coverage file
 reportgenerator `
-  -reports:"TestResults/Coverage/*.xml" `
+  -reports:"TestResults/Coverage/coverage.cobertura.xml" `
   -targetdir:"TestResults/CoverageReport" `
   -reporttypes:"Html;Badges"
 
 # View
 Start-Process TestResults/CoverageReport/index.html
-```
-
-### dotnet-coverage (Microsoft)
-```powershell
-# Install
-dotnet tool install -g dotnet-coverage
-
-# Merge coverage files
-dotnet-coverage merge `
-  TestResults/**/coverage.cobertura.xml `
-  -o TestResults/merged-coverage.xml `
-  -f cobertura
 ```
 
 ### Visual Studio Code Extensions
