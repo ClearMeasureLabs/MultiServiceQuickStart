@@ -392,10 +392,13 @@ try {
             Write-Info "Installing dotnet-coverage tool..."
             dotnet tool install --global dotnet-coverage --verbosity quiet
             if ($LASTEXITCODE -ne 0) {
-                Write-Warning "Failed to install dotnet-coverage tool. Attempting to continue..."
+                Write-Warning "Failed to install dotnet-coverage tool."
+                Write-Warning "Code coverage files will not be merged. Individual .coverage files are available in test result directories."
             }
             else {
                 Write-Success "dotnet-coverage tool installed successfully"
+                # Refresh PATH to make the tool available in current session
+                $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "User")
             }
         }
             
