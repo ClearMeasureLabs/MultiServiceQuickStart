@@ -34,9 +34,6 @@ jobs:
     - name: Display .NET version
       run: dotnet --version
     
-    - name: Restore dependencies
-      run: dotnet restore src/ClearHostedService.sln
-    
     - name: Build solution
       run: |
         cd src
