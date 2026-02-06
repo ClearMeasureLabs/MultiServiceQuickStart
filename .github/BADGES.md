@@ -13,6 +13,17 @@ Add these badges to your README.md to show build and test status.
 - ❌ **Failing** - Red badge when build fails
 - 🟡 **Running** - Yellow badge during execution
 
+## CodeQL Security Analysis Badge
+
+```markdown
+![CodeQL](https://github.com/ClearMeasureLabs/MultiServiceQuickStart/workflows/CodeQL%20Security%20Analysis/badge.svg)
+```
+
+**Badge appears as:**
+- ✅ **Passing** - No critical/high security issues
+- ❌ **Failing** - Critical or high security issues found
+- 🟡 **Running** - Security scan in progress
+
 ## Build Status by Branch
 
 **Main Branch:**
@@ -44,6 +55,9 @@ An opinionated base implementation of `IHostedService` for building robust, prod
 ```markdown
 <!-- Build Status -->
 ![Build and Publish](https://github.com/ClearMeasureLabs/MultiServiceQuickStart/workflows/Build%20and%20Publish/badge.svg)
+
+<!-- CodeQL Security Analysis -->
+![CodeQL](https://github.com/ClearMeasureLabs/MultiServiceQuickStart/workflows/CodeQL%20Security%20Analysis/badge.svg)
 
 <!-- License -->
 ![License](https://img.shields.io/github/license/ClearMeasureLabs/MultiServiceQuickStart)
