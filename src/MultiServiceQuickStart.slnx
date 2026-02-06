@@ -20,7 +20,6 @@
     <File Path="../Docs/ClearHostedService/PROJECT_SUMMARY.md" />
     <File Path="../Docs/ClearHostedService/USAGE.md" />
   </Folder>
-  <Folder Name="/Example/" />
   <Project Path="ClearHostedEndpoint.SqlServerTransport/ClearMeasure.HostedEndpoint.SqlServerTransport.csproj" />
   <Project Path="ClearHostedEndpoint.Tests/ClearHostedEndpoint.Tests.csproj" />
   <Project Path="ClearHostedEndpoint/ClearMeasure.HostedEndpoint.csproj" Id="17d6abd8-b482-4103-8bd5-7cb6c0f26480" />
