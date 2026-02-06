@@ -72,7 +72,7 @@ jobs:
     
     - name: Code Coverage Report
       if: always()
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.4.2
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.1
       with:
         reports: 'src/TestResults/Coverage/**/coverage.cobertura.xml'
         targetdir: 'src/TestResults/CoverageReport'
