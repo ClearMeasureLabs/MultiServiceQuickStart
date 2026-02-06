@@ -319,6 +319,7 @@ try {
         
     $allTestsPassed = $true
     $testCounter = 0
+    $coverageFiles = @()
         
     foreach ($project in $testProjects) {
         $projectPath = Join-Path $scriptPath $project
@@ -343,13 +344,11 @@ try {
                 "--logger", "console;verbosity=normal"
             )
                 
-            # Add code coverage if requested
+            # Add code coverage if requested (using built-in Code Coverage)
             if ($EnableCodeCoverage) {
                 Write-Info "  Collecting code coverage for $projectName"
-                $coverageFileName = "coverage-$projectName.cobertura.xml"
-                $testArgs += "--collect:XPlat Code Coverage"
-                $testArgs += "--"
-                $testArgs += "DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura"
+                $testArgs += "--collect"
+                $testArgs += "Code Coverage"
             }
                 
             # Add detailed test reporting if requested
@@ -367,6 +366,14 @@ try {
             else {
                 Write-Success "Tests passed for $projectName"
             }
+                
+            # Collect coverage file paths for later merging
+            if ($EnableCodeCoverage) {
+                $projectCoverageFiles = Get-ChildItem -Path $projectTestResultsPath -Recurse -Filter "*.coverage" -ErrorAction SilentlyContinue
+                foreach ($file in $projectCoverageFiles) {
+                    $coverageFiles += $file.FullName
+                }
+            }
         }
         else {
             Write-Warning "Test project not found: $project"
@@ -374,27 +381,50 @@ try {
     }
         
     # Process code coverage if enabled
-    if ($EnableCodeCoverage) {
+    if ($EnableCodeCoverage -and $coverageFiles.Count -gt 0) {
         Write-Info "Processing code coverage results..."
         $coverageOutputPath = Join-Path $testResultsPath "Coverage"
         New-Item -ItemType Directory -Path $coverageOutputPath -Force | Out-Null
             
-        # Find all coverage files and copy them to a central location
-        $coverageFiles = Get-ChildItem -Path $testResultsPath -Recurse -Filter "coverage.cobertura.xml" -ErrorAction SilentlyContinue
-        $coverageCounter = 0
-        foreach ($coverageFile in $coverageFiles) {
-            $coverageCounter++
-            $targetFileName = "coverage-$coverageCounter.cobertura.xml"
-            Copy-Item $coverageFile.FullName -Destination (Join-Path $coverageOutputPath $targetFileName) -Force
+        # Check if dotnet-coverage tool is available
+        $dotnetCoverageInstalled = $null -ne (Get-Command "dotnet-coverage" -ErrorAction SilentlyContinue)
+        if (-not $dotnetCoverageInstalled) {
+            Write-Info "Installing dotnet-coverage tool..."
+            dotnet tool install --global dotnet-coverage --verbosity quiet
+            if ($LASTEXITCODE -ne 0) {
+                Write-Warning "Failed to install dotnet-coverage tool."
+                Write-Warning "Code coverage files will not be merged. Individual .coverage files are available in test result directories."
+            }
+            else {
+                Write-Success "dotnet-coverage tool installed successfully"
+                # Refresh PATH to make the tool available in current session
+                $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH", "User")
+            }
         }
             
-        if ($coverageCounter -gt 0) {
-            Write-Success "Code coverage collected: $coverageCounter file(s)"
-            Write-Info "Coverage location: $coverageOutputPath"
+        # Merge coverage files and convert to Cobertura format
+        $outputCoverageFile = Join-Path $coverageOutputPath "coverage.cobertura.xml"
+        Write-Info "Merging $($coverageFiles.Count) coverage file(s) to Cobertura format..."
+            
+        $mergeArgs = @(
+            "merge"
+            "--output", $outputCoverageFile
+            "--output-format", "cobertura"
+        )
+        $mergeArgs += $coverageFiles
+            
+        dotnet-coverage @mergeArgs
+            
+        if ($LASTEXITCODE -eq 0 -and (Test-Path $outputCoverageFile)) {
+            Write-Success "Code coverage merged successfully"
+            Write-Info "Coverage file: $outputCoverageFile"
         }
         else {
-            Write-Warning "No code coverage files found"
+            Write-Warning "Failed to merge coverage files"
         }
+    }
+    elseif ($EnableCodeCoverage) {
+        Write-Warning "Code coverage enabled but no coverage files found"
     }
         
     # Generate test summary

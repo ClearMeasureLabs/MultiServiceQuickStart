@@ -72,24 +72,28 @@ jobs:
     
     - name: Code Coverage Report
       if: always()
-      uses: irongut/CodeCoverageSummary@v1.3.0
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.5.1
       with:
-        filename: src/TestResults/Coverage/**/coverage.cobertura.xml
-        badge: true
-        fail_below_min: false
-        format: markdown
-        hide_branch_rate: false
-        hide_complexity: false
-        indicators: true
-        output: both
-        thresholds: '60 80'
+        reports: 'src/TestResults/Coverage/coverage.cobertura.xml'
+        targetdir: 'src/TestResults/CoverageReport'
+        reporttypes: 'MarkdownSummaryGithub;Html'
+        filefilters: '-*.g.cs'
+        verbosity: 'Info'
+    
+    - name: Write Coverage Summary to Job Summary
+      if: always()
+      run: |
+        if (Test-Path src/TestResults/CoverageReport/SummaryGithub.md) {
+          Get-Content src/TestResults/CoverageReport/SummaryGithub.md >> $env:GITHUB_STEP_SUMMARY
+        }
+      shell: pwsh
     
     - name: Add Coverage PR Comment
       if: github.event_name == 'pull_request' && always()
       uses: marocchino/sticky-pull-request-comment@v2
       with:
         recreate: true
-        path: code-coverage-results.md
+        path: src/TestResults/CoverageReport/SummaryGithub.md
     
     - name: Create NuGet packages
       if: github.event_name == 'push' || github.event_name == 'release' || github.event_name == 'workflow_dispatch'
