@@ -15,7 +15,7 @@
 .PARAMETER PackageOutputPath
     Output directory for NuGet packages. Default: ./artifacts/packages
 .PARAMETER Version
-    Version number for NuGet packages. If not specified, uses version from .csproj files
+    Version number for NuGet packages. Default: 0.0.999 for local builds
 .PARAMETER VerboseOutput
     Enable verbose output
 .PARAMETER EnableCodeCoverage
@@ -57,7 +57,7 @@ param(
     
     [string]$PackageOutputPath,
     
-    [string]$Version,
+    [string]$Version = "0.0.999",
     
     [switch]$VerboseOutput,
     
