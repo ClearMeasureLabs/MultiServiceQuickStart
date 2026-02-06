@@ -1,4 +1,5 @@
 using ClearMeasure.HostedService;
+using Microsoft.Extensions.Configuration;
 
 namespace SimpleWorker;
 
@@ -7,6 +8,9 @@ namespace SimpleWorker;
 /// </summary>
 public class SimpleWorkerService : ClearHostedService
 {
+    public SimpleWorkerService(IConfiguration configuration) : base(configuration)
+    {
+    }
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         Logger.Information("SimpleWorkerService is starting...");

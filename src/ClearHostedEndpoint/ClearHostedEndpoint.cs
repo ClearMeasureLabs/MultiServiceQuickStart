@@ -4,6 +4,7 @@ using ClearMeasure.HostedEndpoint.Exceptions;
 using ClearMeasure.HostedService;
 using Microsoft.Data.SqlClient;
 using ClearMeasure.HostedEndpoint.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace ClearMeasure.HostedEndpoint;
 
@@ -15,6 +16,10 @@ public abstract class ClearHostedEndpoint : ClearHostedService
 {
     private IEndpointInstance? _endpointInstance;
     private IServiceCollection? _nsbServiceCollection;
+
+    protected ClearHostedEndpoint(IConfiguration configuration) : base(configuration)
+    {
+    }
 
     /// <summary>
     /// Gets the NServiceBus endpoint instance. Only available after StartAsync has completed.

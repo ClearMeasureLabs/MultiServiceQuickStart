@@ -1,7 +1,7 @@
 using ClearMeasure.HostedService.Configuration;
 using ClearMeasure.HostedService.Exceptions;
 using ClearMeasure.HostedService.Interfaces;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -18,11 +18,17 @@ namespace ClearMeasure.HostedService;
 /// </summary>
 public abstract class ClearHostedService : IHostedService, IHostedServiceLifecycle, IDisposable
 {
-    private IServiceProvider? _serviceProvider;
+    protected IServiceProvider? _serviceProvider;
+    protected IConfiguration Configuration;
     private ILogger? _logger;
     private Task? _executingTask;
     private CancellationTokenSource? _stoppingCts;
     private bool _disposed;
+
+    protected ClearHostedService(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
 
     /// <summary>
     /// Gets the service provider for this hosted service instance.

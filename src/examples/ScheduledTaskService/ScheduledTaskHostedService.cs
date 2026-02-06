@@ -1,4 +1,5 @@
 using ClearMeasure.HostedService;
+using Microsoft.Extensions.Configuration;
 
 namespace ScheduledTaskService;
 
@@ -9,7 +10,7 @@ public class ScheduledTaskHostedService : ClearHostedService
 {
     private readonly TaskSchedule _schedule;
 
-    public ScheduledTaskHostedService()
+    public ScheduledTaskHostedService(IConfiguration configuration) : base(configuration)
     {
         // Schedule daily execution at 2:00 AM
         // For demo purposes, we'll schedule it for every minute

@@ -9,7 +9,7 @@ public class SqlPersistenceConfigurationTests
     public async Task Endpoint_WithoutSqlPersistence_ShouldUseLearningPersistence()
     {
         // Arrange
-        var endpoint = new TestEndpoint();
+        var endpoint = new TestEndpoint(TestHelpers.CreateTestConfiguration());
 
         try
         {
@@ -36,7 +36,7 @@ public class SqlPersistenceConfigurationTests
             ConnectionString = "Server=localhost;Database=TestDb;Trusted_Connection=true;",
             Schema = "dbo"
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -62,7 +62,7 @@ public class SqlPersistenceConfigurationTests
             ConnectionString = "Server=localhost;Database=TestDb;Trusted_Connection=true;",
             Schema = "messaging"
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -88,7 +88,7 @@ public class SqlPersistenceConfigurationTests
             ConnectionString = "Server=localhost;Database=TestDb;Trusted_Connection=true;",
             TablePrefix = "MyEndpoint_"
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -114,7 +114,7 @@ public class SqlPersistenceConfigurationTests
             ConnectionString = "Server=localhost;Database=TestDb;Trusted_Connection=true;",
             TablePrefix = null
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -140,7 +140,7 @@ public class SqlPersistenceConfigurationTests
             ConnectionString = "Server=localhost;Database=TestDb;Trusted_Connection=true;",
             EnableSagaPersistence = true
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -167,7 +167,7 @@ public class SqlPersistenceConfigurationTests
             EnableSubscriptionStorage = true,
             SubscriptionCachePeriod = TimeSpan.FromSeconds(10)
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         try
         {
@@ -192,7 +192,7 @@ public class SqlPersistenceConfigurationTests
         {
             ConnectionString = null
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);
@@ -213,7 +213,7 @@ public class SqlPersistenceConfigurationTests
         {
             ConnectionString = string.Empty
         };
-        var endpoint = new SqlPersistenceEndpoint(sqlOptions);
+        var endpoint = new SqlPersistenceEndpoint(TestHelpers.CreateTestConfiguration(), sqlOptions);
 
         // Act
         var act = async () => await endpoint.StartAsync(CancellationToken.None);

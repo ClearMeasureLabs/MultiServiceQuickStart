@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/.github/">
     <File Path="../.github/copilot-instructions.md" />
+    <File Path="../.github/workflows/build-and-publish.yml" />
   </Folder>
   <Folder Name="/Docs/">
     <File Path="../README.md" />
@@ -19,6 +20,13 @@
     <File Path="../Docs/ClearHostedService/FAQ.md" />
     <File Path="../Docs/ClearHostedService/PROJECT_SUMMARY.md" />
     <File Path="../Docs/ClearHostedService/USAGE.md" />
+  </Folder>
+  <Folder Name="/Examples/">
+    <Project Path="examples/DataProcessorService/DataProcessorService.csproj" />
+    <Project Path="examples/NServiceBusEndpoint/NServiceBusEndpoint.csproj" />
+    <Project Path="examples/NServiceBusWebApp/NServiceBusWebApp.csproj" />
+    <Project Path="examples/ScheduledTaskService/ScheduledTaskService.csproj" />
+    <Project Path="examples/SimpleWorker/SimpleWorker.csproj" />
   </Folder>
   <Project Path="ClearHostedEndpoint.SqlServerTransport/ClearMeasure.HostedEndpoint.SqlServerTransport.csproj" />
   <Project Path="ClearHostedEndpoint.Tests/ClearHostedEndpoint.Tests.csproj" />
