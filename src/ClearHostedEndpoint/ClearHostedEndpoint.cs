@@ -138,6 +138,11 @@ public abstract class ClearHostedEndpoint : ClearHostedService
         // Configure concurrency
         endpointConfiguration.LimitMessageProcessingConcurrencyTo(EndpointOptions.MaxConcurrency);
 
+        // Register timing behavior for Application Insights metrics
+        endpointConfiguration.Pipeline.Register(
+            behavior: typeof(Behaviors.TimingBehavior),
+            description: "Tracks message handler execution time for Application Insights");
+
         return endpointConfiguration;
     }
 

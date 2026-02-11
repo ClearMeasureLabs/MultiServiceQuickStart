@@ -214,7 +214,50 @@ public abstract class ClearHostedService : IHostedService, IHostedServiceLifecyc
                 outputTemplate: options.OutputTemplate);
         }
 
+        if (options.EnableApplicationInsights && !string.IsNullOrWhiteSpace(options.ApplicationInsightsConnectionString))
+        {
+            var cloudRoleName = options.ApplicationName ?? GetType().Name;
+            var cloudRoleInstance = options.CloudInstanceName ?? GetCloudRoleInstance();
+            
+            var compositeConverter = new Infrastructure.CompositeTelemetryConverter(
+                cloudRoleName, 
+                cloudRoleInstance);
+            
+            loggerConfig.WriteTo.ApplicationInsights(
+                connectionString: options.ApplicationInsightsConnectionString,
+                telemetryConverter: compositeConverter);
+        }
+
         Log.Logger = loggerConfig.CreateLogger();
+    }
+
+    /// <summary>
+    /// Gets the cloud role instance name based on the environment.
+    /// For on-prem: returns machine name
+    /// For Azure: returns resource group + instance name
+    /// </summary>
+    private string GetCloudRoleInstance()
+    {
+        var machineName = Environment.MachineName;
+        
+        // Check for Azure App Service
+        var websiteName = Environment.GetEnvironmentVariable("WEBSITE_SITE_NAME");
+        var websiteInstanceId = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
+        
+        if (!string.IsNullOrWhiteSpace(websiteName) && !string.IsNullOrWhiteSpace(websiteInstanceId))
+        {
+            return $"{websiteName}_{websiteInstanceId}";
+        }
+        
+        // Check for Azure Container Apps or Kubernetes
+        var hostname = Environment.GetEnvironmentVariable("HOSTNAME");
+        if (!string.IsNullOrWhiteSpace(hostname) && hostname != machineName)
+        {
+            return hostname;
+        }
+        
+        // Default to machine name for on-prem
+        return machineName;
     }
 
     /// <summary>
