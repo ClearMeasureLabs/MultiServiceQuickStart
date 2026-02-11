@@ -1,6 +1,8 @@
 using ClearMeasure.HostedService.Configuration;
 using ClearMeasure.HostedService.Exceptions;
 using ClearMeasure.HostedService.Interfaces;
+using ClearMeasure.HostedService.Infrastructure.TelemetryConverters;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using Serilog;
 using Serilog.Events;
+using Serilog.Sinks.ApplicationInsights.TelemetryConverters;
 
 using ILogger = Serilog.ILogger;
 
@@ -212,6 +215,29 @@ public abstract class ClearHostedService : IHostedService, IHostedServiceLifecyc
                 logFilePath,
                 rollingInterval: options.RollingInterval,
                 outputTemplate: options.OutputTemplate);
+        }
+
+        if (options.EnableApplicationInsights && !string.IsNullOrWhiteSpace(options.ApplicationInsightsConnectionString))
+        {
+            // Configure telemetry configuration with custom initializers
+            var telemetryConfiguration = new TelemetryConfiguration
+            {
+                ConnectionString = options.ApplicationInsightsConnectionString
+            };
+
+            // Add cloud role name converter if application name is provided
+            if (!string.IsNullOrWhiteSpace(options.ApplicationName))
+            {
+                telemetryConfiguration.TelemetryInitializers.Add(new CloudRoleNameConverter(options.ApplicationName));
+            }
+
+            // Add cloud instance converter
+            telemetryConfiguration.TelemetryInitializers.Add(new CloudInstanceConverter(options.CloudInstance));
+
+            // Add Application Insights sink
+            loggerConfig.WriteTo.ApplicationInsights(
+                telemetryConfiguration,
+                TelemetryConverter.Traces);
         }
 
         Log.Logger = loggerConfig.CreateLogger();
