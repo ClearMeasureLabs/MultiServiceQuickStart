@@ -1,6 +1,8 @@
 using ClearMeasure.HostedService.Configuration;
 using ClearMeasure.HostedService.Exceptions;
 using ClearMeasure.HostedService.Interfaces;
+using ClearMeasure.HostedService.Telemetry;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -212,6 +214,20 @@ public abstract class ClearHostedService : IHostedService, IHostedServiceLifecyc
                 logFilePath,
                 rollingInterval: options.RollingInterval,
                 outputTemplate: options.OutputTemplate);
+        }
+
+        if (options.EnableApplicationInsights && !string.IsNullOrEmpty(options.ApplicationInsightsConnectionString))
+        {
+            var telemetryConfiguration = new TelemetryConfiguration
+            {
+                ConnectionString = options.ApplicationInsightsConnectionString
+            };
+
+            var telemetryConverter = new Telemetry.TelemetryConverter(GetType().Name);
+
+            loggerConfig.WriteTo.ApplicationInsights(
+                telemetryConfiguration,
+                telemetryConverter);
         }
 
         Log.Logger = loggerConfig.CreateLogger();
