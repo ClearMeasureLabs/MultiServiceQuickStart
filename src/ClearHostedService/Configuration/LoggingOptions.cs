@@ -39,8 +39,14 @@ public class LoggingOptions
     public bool EnableApplicationInsights { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets the ApplicationInsights instrumentation key.
+    /// Gets or sets the ApplicationInsights connection string.
     /// </summary>
+    public string? ApplicationInsightsConnectionString { get; set; }
+
+    /// <summary>
+    /// Gets or sets the ApplicationInsights instrumentation key (deprecated, use ApplicationInsightsConnectionString instead).
+    /// </summary>
+    [Obsolete("Use ApplicationInsightsConnectionString instead. This property is maintained for backward compatibility.")]
     public string? ApplicationInsightsInstrumentationKey { get; set; }
 
     /// <summary>

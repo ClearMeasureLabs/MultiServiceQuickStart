@@ -138,7 +138,53 @@ public abstract class ClearHostedEndpoint : ClearHostedService
         // Configure concurrency
         endpointConfiguration.LimitMessageProcessingConcurrencyTo(EndpointOptions.MaxConcurrency);
 
+        // Register handler timing behavior if Application Insights is enabled
+        var loggingOptions = GetLoggingOptions();
+        if (loggingOptions.EnableApplicationInsights)
+        {
+            RegisterHandlerTimingBehavior(endpointConfiguration, loggingOptions);
+        }
+
         return endpointConfiguration;
+    }
+
+    /// <summary>
+    /// Registers the handler timing behavior for Application Insights telemetry.
+    /// </summary>
+    /// <param name="endpointConfiguration">The endpoint configuration.</param>
+    /// <param name="loggingOptions">The logging options containing Application Insights settings.</param>
+    protected virtual void RegisterHandlerTimingBehavior(EndpointConfiguration endpointConfiguration, HostedService.Configuration.LoggingOptions loggingOptions)
+    {
+        var connectionString = loggingOptions.ApplicationInsightsConnectionString;
+        
+        #pragma warning disable CS0618
+        if (string.IsNullOrEmpty(connectionString) && !string.IsNullOrEmpty(loggingOptions.ApplicationInsightsInstrumentationKey))
+        {
+            connectionString = $"InstrumentationKey={loggingOptions.ApplicationInsightsInstrumentationKey}";
+        }
+        #pragma warning restore CS0618
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            Logger.Warning("Application Insights is enabled but no connection string provided. Handler timing metrics will not be tracked.");
+            return;
+        }
+
+        var telemetryConfiguration = new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration
+        {
+            ConnectionString = connectionString
+        };
+
+        // Add cloud role telemetry initializer
+        telemetryConfiguration.TelemetryInitializers.Add(new HostedService.Infrastructure.CloudRoleTelemetryInitializer(EffectiveEndpointName));
+
+        var telemetryClient = new Microsoft.ApplicationInsights.TelemetryClient(telemetryConfiguration);
+
+        endpointConfiguration.Pipeline.Register(
+            new Infrastructure.HandlerTimingBehavior(telemetryClient),
+            "Tracks handler execution time and sends metrics to Application Insights");
+
+        Logger.Information("Handler timing behavior registered for Application Insights in endpoint {EndpointName}", EffectiveEndpointName);
     }
 
     /// <summary>
