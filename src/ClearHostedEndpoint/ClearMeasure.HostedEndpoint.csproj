@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>ClearMeasureLabs.HostedEndpoint</PackageId>
     <Version>1.0.0</Version>
     <Authors>Clear Measure</Authors>
     <Description>An opinionated base implementation for hosting NServiceBus 9 endpoints as IHostedService with reasonable defaults.</Description>

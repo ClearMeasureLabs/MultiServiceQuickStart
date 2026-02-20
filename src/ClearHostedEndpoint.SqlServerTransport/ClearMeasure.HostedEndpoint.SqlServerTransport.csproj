@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>ClearMeasureLabs.HostedEndpoint.SqlServerTransport</PackageId>
     <Version>1.0.0</Version>
     <Authors>Clear Measure</Authors>
     <Description>Standardized SQL Server Transport configuration for NServiceBus with transaction management and storage context.</Description>
