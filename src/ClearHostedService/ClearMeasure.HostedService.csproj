@@ -5,6 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>ClearMeasureLabs.HostedService</PackageId>
     <Version>1.0.0</Version>
     <Authors>QuickHostedService Contributors</Authors>
     <Description>An opinionated base implementation of IHostedService for building robust, production-ready background services in .NET with minimal boilerplate code.</Description>
