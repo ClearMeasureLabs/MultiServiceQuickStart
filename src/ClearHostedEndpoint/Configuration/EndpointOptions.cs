@@ -71,4 +71,10 @@ public class EndpointOptions
     /// Gets or sets how long to keep outbox deduplication data. Default is 7 days.
     /// </summary>
     public TimeSpan OutboxTimeToKeepDeduplicationData { get; set; } = TimeSpan.FromDays(7);
+
+    /// <summary>
+    /// Gets or sets whether to enable timing behavior for NServiceBus handlers. Default is false.
+    /// When enabled, logs handler execution time with Application Insights context.
+    /// </summary>
+    public bool EnableTimingBehavior { get; set; } = false;
 }
