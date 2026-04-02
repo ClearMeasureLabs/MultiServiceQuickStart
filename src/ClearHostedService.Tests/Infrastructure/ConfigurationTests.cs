@@ -21,7 +21,10 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging.Should().BeTrue();
         options.EnableFileLogging.Should().BeTrue();
         options.EnableApplicationInsights.Should().BeFalse();
+        options.ApplicationInsightsConnectionString.Should().BeNull();
+#pragma warning disable CS0618
         options.ApplicationInsightsInstrumentationKey.Should().BeNull();
+#pragma warning restore CS0618
     }
 
     [Fact]
@@ -37,7 +40,10 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging = false;
         options.EnableFileLogging = false;
         options.EnableApplicationInsights = true;
-        options.ApplicationInsightsInstrumentationKey = "test-key";
+        options.ApplicationInsightsConnectionString = "InstrumentationKey=test-key;IngestionEndpoint=https://test.applicationinsights.azure.com/";
+#pragma warning disable CS0618
+        options.ApplicationInsightsInstrumentationKey = "test-key-legacy";
+#pragma warning restore CS0618
 
         // Assert
         options.LogLevel.Should().Be(LogEventLevel.Debug);
@@ -46,7 +52,10 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging.Should().BeFalse();
         options.EnableFileLogging.Should().BeFalse();
         options.EnableApplicationInsights.Should().BeTrue();
-        options.ApplicationInsightsInstrumentationKey.Should().Be("test-key");
+        options.ApplicationInsightsConnectionString.Should().Be("InstrumentationKey=test-key;IngestionEndpoint=https://test.applicationinsights.azure.com/");
+#pragma warning disable CS0618
+        options.ApplicationInsightsInstrumentationKey.Should().Be("test-key-legacy");
+#pragma warning restore CS0618
     }
 }
 

@@ -214,7 +214,50 @@ public abstract class ClearHostedService : IHostedService, IHostedServiceLifecyc
                 outputTemplate: options.OutputTemplate);
         }
 
+        if (options.EnableApplicationInsights)
+        {
+            ConfigureApplicationInsights(loggerConfig, options);
+        }
+
         Log.Logger = loggerConfig.CreateLogger();
+    }
+
+    /// <summary>
+    /// Configures Application Insights sink with telemetry initializers.
+    /// </summary>
+    /// <param name="loggerConfig">The logger configuration to add Application Insights to.</param>
+    /// <param name="options">The logging options containing Application Insights settings.</param>
+    protected virtual void ConfigureApplicationInsights(LoggerConfiguration loggerConfig, LoggingOptions options)
+    {
+        // Support both connection string (modern) and instrumentation key (legacy)
+        var connectionString = options.ApplicationInsightsConnectionString;
+        
+        #pragma warning disable CS0618 // Type or member is obsolete
+        if (string.IsNullOrEmpty(connectionString) && !string.IsNullOrEmpty(options.ApplicationInsightsInstrumentationKey))
+        {
+            connectionString = $"InstrumentationKey={options.ApplicationInsightsInstrumentationKey}";
+        }
+        #pragma warning restore CS0618
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            Log.Logger?.Warning("Application Insights is enabled but no connection string or instrumentation key is provided");
+            return;
+        }
+
+        var telemetryConfiguration = new Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration
+        {
+            ConnectionString = connectionString
+        };
+
+        // Add cloud role telemetry initializer
+        var serviceName = GetType().Name;
+        telemetryConfiguration.TelemetryInitializers.Add(new Infrastructure.CloudRoleTelemetryInitializer(serviceName));
+
+        // Use the ApplicationInsights sink with trace telemetry converter
+        loggerConfig.WriteTo.ApplicationInsights(
+            telemetryConfiguration,
+            new Serilog.Sinks.ApplicationInsights.TelemetryConverters.TraceTelemetryConverter());
     }
 
     /// <summary>
