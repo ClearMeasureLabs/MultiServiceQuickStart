@@ -21,7 +21,9 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging.Should().BeTrue();
         options.EnableFileLogging.Should().BeTrue();
         options.EnableApplicationInsights.Should().BeFalse();
-        options.ApplicationInsightsInstrumentationKey.Should().BeNull();
+        options.ApplicationInsightsConnectionString.Should().BeNull();
+        options.ApplicationName.Should().BeNull();
+        options.CloudInstanceName.Should().BeNull();
     }
 
     [Fact]
@@ -37,7 +39,9 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging = false;
         options.EnableFileLogging = false;
         options.EnableApplicationInsights = true;
-        options.ApplicationInsightsInstrumentationKey = "test-key";
+        options.ApplicationInsightsConnectionString = "InstrumentationKey=test-key;IngestionEndpoint=https://test.applicationinsights.azure.com/";
+        options.ApplicationName = "TestApp";
+        options.CloudInstanceName = "TestInstance";
 
         // Assert
         options.LogLevel.Should().Be(LogEventLevel.Debug);
@@ -46,7 +50,9 @@ public class LoggingOptionsTests
         options.EnableConsoleLogging.Should().BeFalse();
         options.EnableFileLogging.Should().BeFalse();
         options.EnableApplicationInsights.Should().BeTrue();
-        options.ApplicationInsightsInstrumentationKey.Should().Be("test-key");
+        options.ApplicationInsightsConnectionString.Should().Be("InstrumentationKey=test-key;IngestionEndpoint=https://test.applicationinsights.azure.com/");
+        options.ApplicationName.Should().Be("TestApp");
+        options.CloudInstanceName.Should().Be("TestInstance");
     }
 }
 

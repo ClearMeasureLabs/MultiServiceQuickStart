@@ -39,9 +39,21 @@ public class LoggingOptions
     public bool EnableApplicationInsights { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets the ApplicationInsights instrumentation key.
+    /// Gets or sets the ApplicationInsights connection string.
     /// </summary>
-    public string? ApplicationInsightsInstrumentationKey { get; set; }
+    public string? ApplicationInsightsConnectionString { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the application name (CloudRoleName) for ApplicationInsights telemetry.
+    /// Defaults to the service type name if not specified.
+    /// </summary>
+    public string? ApplicationName { get; set; }
+    
+    /// <summary>
+    /// Gets or sets the cloud instance name (CloudRoleInstance) for ApplicationInsights telemetry.
+    /// Defaults to machine name for on-prem or resource group + instance name for cloud deployments.
+    /// </summary>
+    public string? CloudInstanceName { get; set; }
 
     /// <summary>
     /// Gets or sets the output template for log messages.
