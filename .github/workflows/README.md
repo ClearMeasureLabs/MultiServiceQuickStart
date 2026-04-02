@@ -4,6 +4,66 @@ This directory contains the CI/CD workflows for the ClearHostedService solution.
 
 ## Workflows
 
+### CodeQL Security Analysis (`codeql-analysis.yml`)
+
+Automated security scanning using GitHub's CodeQL to identify security vulnerabilities and code quality issues.
+
+#### Triggers
+
+- **Push**: Runs on pushes to `main` and `develop` branches
+- **Pull Request**: Runs on PRs targeting `main` and `develop` branches
+- **Schedule**: Runs daily at 2 AM UTC for continuous monitoring
+- **Manual**: Can be triggered manually via workflow_dispatch
+
+#### Analysis Configuration
+
+- **Language**: C# (csharp)
+- **Query Suite**: security-extended (comprehensive security analysis)
+- **Build**: Uses the repository's build.ps1 script
+- **Results**: Uploaded to GitHub Security tab (SARIF format)
+
+#### Severity Levels and Thresholds
+
+The workflow analyzes security issues based on severity scores:
+
+| Severity | Score Range | Action |
+|----------|-------------|--------|
+| **Critical** | 9.0 - 10.0 | ❌ Blocks build |
+| **High** | 7.0 - 8.9 | ❌ Blocks build |
+| **Medium** | 4.0 - 6.9 | ⚠️ Warning only |
+| **Low** | 0.0 - 3.9 | ℹ️ Informational |
+
+**Build Blocking Behavior:**
+- The workflow will **FAIL** if any Critical or High severity issues are detected
+- Medium and Low severity issues are reported but do not block the build
+- Build cannot proceed until blocking issues are addressed or dismissed
+
+#### Viewing Results
+
+**GitHub Security Tab:**
+1. Navigate to the repository's "Security" tab
+2. Click "Code scanning alerts" 
+3. View all detected issues with details and remediation guidance
+
+**Pull Request Checks:**
+- CodeQL creates a required status check for PRs
+- Results are displayed in the "Checks" tab
+- Summary appears in the workflow job summary
+- Blocking issues prevent PR merge (when branch protection is configured)
+
+**Workflow Job Summary:**
+- Shows count of issues by severity
+- Lists first 5 critical/high severity issues with locations
+- Provides quick overview without navigating to Security tab
+
+#### Permissions Required
+
+The workflow requires the following GitHub permissions:
+- `actions: read` - Read workflow runs
+- `contents: read` - Read repository content
+- `security-events: write` - Upload SARIF results to Security tab
+- `pull-requests: write` - Comment on PRs (if enabled)
+
 ### Build and Publish (`build-and-publish.yml`)
 
 Automated build, test, and package publishing workflow that runs on every push, pull request, and release.
@@ -371,6 +431,44 @@ Optimizations:
 5. **Monitor artifact storage** to avoid exceeding GitHub limits
 6. **Update package versions** before releases
 7. **Test package installation** from GitHub Packages after publishing
+8. **Address CodeQL security findings** before merging PRs
+9. **Review Security tab regularly** for new vulnerabilities
+
+## Troubleshooting
+
+### CodeQL Analysis Failures
+
+1. **Build fails during CodeQL analysis**
+   - Ensure the build script works correctly: `.\src\build.ps1 -Configuration Release -SkipTests`
+   - Check that all dependencies are restored properly
+   - Review CodeQL initialization logs for errors
+
+2. **Critical/High severity issues blocking build**
+   - Navigate to Security tab → Code scanning alerts
+   - Review each blocking issue and its recommended fix
+   - Fix the code or dismiss false positives with justification
+   - Re-run the workflow after fixes
+
+3. **SARIF files not generated**
+   - Check CodeQL analyze step completed successfully
+   - Verify permissions are correct (security-events: write)
+   - Review workflow logs for errors in the analyze step
+
+4. **False positive security alerts**
+   - Navigate to the specific alert in the Security tab
+   - Click "Dismiss alert" and select appropriate reason
+   - Add a comment explaining why it's a false positive
+   - The alert will no longer block future builds
+
+### Configuring Branch Protection
+
+To require CodeQL checks before merging:
+
+1. Go to repository Settings → Branches
+2. Add or edit branch protection rule for `main` and `develop`
+3. Enable "Require status checks to pass before merging"
+4. Search for and select "Analyze Code with CodeQL"
+5. Save the protection rule
 
 ## Future Enhancements
 
@@ -378,12 +476,13 @@ Potential improvements to consider:
 
 - [ ] Add integration with external code coverage services (Codecov, Coveralls)
 - [ ] Implement automated version bumping
-- [ ] Add security scanning (dependency check, vulnerability scanning)
+- [x] ✅ Add security scanning (CodeQL for vulnerability scanning)
 - [ ] Create separate workflows for PR validation vs. deployment
 - [ ] Add performance benchmarking
 - [ ] Implement automated changelog generation
 - [ ] Add mutation testing
 - [ ] Create deployment workflows for production environments
+- [ ] Add dependency scanning (Dependabot or similar)
 
 ## Additional Resources
 
@@ -392,3 +491,5 @@ Potential improvements to consider:
 - [.NET CLI Documentation](https://docs.microsoft.com/en-us/dotnet/core/tools/)
 - [Coverlet Documentation](https://github.com/coverlet-coverage/coverlet)
 - [Semantic Versioning](https://semver.org/)
+- [CodeQL Documentation](https://codeql.github.com/docs/)
+- [GitHub Code Scanning](https://docs.github.com/en/code-security/code-scanning)
