@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using System.Data.Common;
+using ClearMeasure.HostedEndpoint.Behaviors;
 using ClearMeasure.HostedEndpoint.Exceptions;
 using ClearMeasure.HostedService;
 using Microsoft.Data.SqlClient;
@@ -137,6 +138,11 @@ public abstract class ClearHostedEndpoint : ClearHostedService
 
         // Configure concurrency
         endpointConfiguration.LimitMessageProcessingConcurrencyTo(EndpointOptions.MaxConcurrency);
+
+        // Register timing behavior for metrics
+        endpointConfiguration.Pipeline.Register(
+            behavior: typeof(TimingBehavior),
+            description: "Captures and logs handler execution timing metrics");
 
         return endpointConfiguration;
     }

@@ -39,9 +39,9 @@ public class LoggingOptions
     public bool EnableApplicationInsights { get; set; } = false;
 
     /// <summary>
-    /// Gets or sets the ApplicationInsights instrumentation key.
+    /// Gets or sets the ApplicationInsights connection string.
     /// </summary>
-    public string? ApplicationInsightsInstrumentationKey { get; set; }
+    public string? ApplicationInsightsConnectionString { get; set; }
 
     /// <summary>
     /// Gets or sets the output template for log messages.
